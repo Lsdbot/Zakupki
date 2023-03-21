@@ -1,0 +1,8 @@
+#Jupyter notebook
+*.ipynb_checkpoints
+
+#Python
+.idea
+
+#csv files
+data/*.csv
