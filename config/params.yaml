@@ -1,0 +1,10 @@
+preprocessing:
+  change_type_columns:
+    region_code: category
+    purchase: category
+    min_publish_date: datetime64[D]
+    customer: category
+    okpd2_code: category
+    okpd2_names: category
+    supplier: category
+    

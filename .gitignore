@@ -6,3 +6,4 @@
 
 #csv files
 data/*.csv
+notebooks/*.csv
