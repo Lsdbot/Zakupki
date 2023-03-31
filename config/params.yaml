@@ -7,4 +7,10 @@ preprocessing:
     okpd2_code: category
     okpd2_names: category
     supplier: category
+baseline:
+  change_type_columns:
+    reg_code_small: category
+    min_publish_date: datetime64[D]
+    customer: category
+    supplier: category
     
