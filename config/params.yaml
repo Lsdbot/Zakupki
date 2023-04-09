@@ -1,16 +1,36 @@
 preprocessing:
+  change_columns:
+    forsmallbiz:
+      t: 1
+      f: 0
   change_type_columns:
-    region_code: category
-    purchase: category
     min_publish_date: datetime64[D]
-    customer: category
-    okpd2_code: category
-    okpd2_names: category
     supplier: category
-baseline:
-  change_type_columns:
     reg_code: category
-    min_publish_date: datetime64[D]
-    customer: category
-    supplier: category
+  drop_columns: ['tokens', 'region_code', 'okpd2_code', 'customer']
+  drop_text_columns: ['purchase_name', 'items_descriptions', 'purchase_name']
+  supplier_path: ../data/raw/small_suppliers.csv
+  purchases_path: ../data/raw/small_purchases.csv
+  train_data: ../data/processed/train_data.csv
+  test_data: ../data/processed/test_data.csv
+  submission: ../data/check/submission.csv
+  submission_less_4: ../data/check/submission_less_4.csv
+  winning_evaluate: ../data/check/winning_evaluate.csv
+
+train:
+  drop_columns_lgbm: ['supplier', 'min_publish_date', 'reg_code']
+  drop_columns_catboost: ['vectorized_tokens', 'purchase', 'min_publish_date']
+  lightgbm_params: model_params/lightgbm.yaml
+  catboost_params: model_params/catboost.yaml
+  random_state: 42
+  N_FOLDS: 4
+  test_size: 0.2
+
+evaluate:
+  submission: ../data/check/submission.csv
+  submission_less_4: ../data/check/submission_less_4.csv
+
+
+
+
     

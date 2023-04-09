@@ -5,5 +5,8 @@
 .idea
 
 #csv files
-data/*.csv
+data/
 notebooks/*.csv
+
+#catboost files
+notebooks/catboost_info/
