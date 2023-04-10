@@ -18,7 +18,9 @@ preprocessing:
   winning_evaluate: ../data/check/winning_evaluate.csv
 
 train:
-  drop_columns_lgbm: ['supplier', 'reg_code', 'is_winner', 'vectorized_tokens']
+  drop_columns_lgbm: ['supplier', 'reg_code', 'is_winner',
+                      'vectorized_tokens', 'customer', 'flag_won',
+                      'purchase_size', 'n_unique_okpd2']
   drop_columns_catboost: ['vectorized_tokens', 'purchase', 'customer']
   lightgbm_params: model_params/lightgbm.yaml
   catboost_params: model_params/catboost.yaml
