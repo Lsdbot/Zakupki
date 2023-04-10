@@ -4,7 +4,6 @@ preprocessing:
       t: 1
       f: 0
   change_type_columns:
-    min_publish_date: datetime64[D]
     supplier: category
     reg_code: category
   drop_columns: ['region_code', 'okpd2_code', 'min_publish_date']
@@ -19,8 +18,8 @@ preprocessing:
   winning_evaluate: ../data/check/winning_evaluate.csv
 
 train:
-  drop_columns_lgbm: ['supplier', 'min_publish_date', 'reg_code', 'is_winner', 'vectorized_tokens']
-  drop_columns_catboost: ['vectorized_tokens', 'purchase', 'min_publish_date']
+  drop_columns_lgbm: ['supplier', 'reg_code', 'is_winner', 'vectorized_tokens']
+  drop_columns_catboost: ['vectorized_tokens', 'purchase', 'customer']
   lightgbm_params: model_params/lightgbm.yaml
   catboost_params: model_params/catboost.yaml
   random_state: 42
