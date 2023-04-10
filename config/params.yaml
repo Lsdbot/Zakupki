@@ -29,7 +29,8 @@ train:
 evaluate:
   submission: ../data/check/submission.csv
   submission_less_4: ../data/check/submission_less_4.csv
-
+  test_evaluate: ../data/check/test_evaluate.csv
+  winning_evaluate: ../data/check/winning_evaluate.csv
 
 
 
