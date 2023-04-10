@@ -24,6 +24,7 @@ train:
   drop_columns_catboost: ['vectorized_tokens', 'purchase', 'customer']
   lightgbm_params: model_params/lightgbm.yaml
   catboost_params: model_params/catboost.yaml
+  cat_features: ['supplier', 'reg_code']
   random_state: 42
   N_FOLDS: 4
   test_size: 0.2
