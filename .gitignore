@@ -10,3 +10,6 @@ notebooks/*.csv
 
 #catboost files
 notebooks/catboost_info/
+
+#models
+models/models/

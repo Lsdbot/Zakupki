@@ -1,0 +1,21 @@
+catboost:
+  bagging_temperature: 58.398088499972424
+  border_count: 128
+  depth: 8
+  grow_policy: SymmetricTree
+  l2_leaf_reg: 20.577399032571144
+  learning_rate: 0.0787449098272658
+  n_estimators: 1000
+  random_strength: 35.05438987752425
+xgboost:
+  colsample_bylevel: 0.9374327913713476
+  colsample_bynode: 0.7539564372637708
+  colsample_bytree: 0.5157150597834432
+  gamma: 7
+  learning_rate: 0.21783913980394612
+  max_depth: 4
+  min_child_weight: 2
+  n_estimators: 1000
+  reg_alpha: 1.3809668962806132
+  reg_lambda: 0.028023961074903042
+  subsample: 0.5223329856255032

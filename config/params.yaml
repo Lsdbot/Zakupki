@@ -8,28 +8,33 @@ preprocessing:
     reg_code: category
   drop_columns: ['region_code', 'okpd2_code', 'min_publish_date']
   drop_text_columns: ['purchase_name', 'item_descriptions', 'okpd2_names']
-  supplier_path: ../data/raw/small_suppliers.csv
-  purchases_path: ../data/raw/small_purchases.csv
+  supplier_small_path: ../data/raw/small_suppliers.csv
+  purchases_small_path: ../data/raw/small_purchases.csv
+  supplier_path: ../data/raw/all_suppliers.csv
+  purchase_path: ../data/raw/all_purchases.csv
   train_data: ../data/processed/train_data.csv
   test_data: ../data/processed/test_data.csv
   submission: ../data/check/submission.csv
-  submission_less_4: ../data/check/submission_less_4.csv
-  test_evaluate: ../data/check/test_evaluate.csv
+  evaluate_data: ../data/check/evaluate_data.csv
   winning_evaluate: ../data/check/winning_evaluate.csv
 
 train:
-  drop_columns_lgbm: ['supplier', 'reg_code', 'is_winner', 'vectorized_tokens']
-  drop_columns_catboost: ['vectorized_tokens', 'purchase', 'customer']
-  lightgbm_params: model_params/lightgbm.yaml
-  catboost_params: model_params/catboost.yaml
+  drop_columns_recommender: ['supplier', 'reg_code', 'is_winner',
+                             'vectorized_tokens', 'customer', 'flag_won',
+                             'purchase_size', 'n_unique_okpd2']
+  drop_columns_winner: ['vectorized_tokens', 'purchase', 'customer']
+  recommender_params: ../models/params/recommender_params.yaml
+  ensemble_params: ../models/params/ensemble_params.yaml
+  recommender_models: ../models/models/recommender_models.joblib
+  ensemble_models: ../models/models/ensemble_models.joblib
+  cat_features: ['supplier', 'reg_code']
   random_state: 42
   N_FOLDS: 4
-  test_size: 0.2
+  test_size: 0.25
 
 evaluate:
   submission: ../data/check/submission.csv
-  submission_less_4: ../data/check/submission_less_4.csv
-  test_evaluate: ../data/check/test_evaluate.csv
+  evaluate_data: ../data/check/evaluate_data.csv
   winning_evaluate: ../data/check/winning_evaluate.csv
 
 
