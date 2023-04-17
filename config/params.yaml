@@ -37,11 +37,11 @@ preprocessing:
     how: outer
   flag:
     train_columns: ['supplier', 'customer', 'flag_won']
-    groupby: ['suppleir', 'customer']
+    groupby: ['supplier', 'customer']
     on: ['supplier', 'customer']
     how: left
   uniq_okpd2:
-    groupby: suppleir
+    groupby: supplier
     values: okpd2_code
     on: supplier
     name: n_unique_okpd2
