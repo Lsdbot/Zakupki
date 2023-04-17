@@ -1,4 +1,5 @@
 preprocessing:
+  merge_column: purchase
   change_ids_columns: ['purchase', 'supplier', 'customer']
   fillna_columns:
     item_descriptions: purchase_name
@@ -51,9 +52,9 @@ preprocessing:
   purchase_path: ../data/raw/all_purchases.csv
   train_data: ../data/processed/train_data.csv
   test_data: ../data/processed/test_data.csv
-  submission: ../data/check/submission.csv
+  recommend_sub_path: ../data/check/recommend_submission.csv
+  winner_sub_path: ../data/check/winner_submission.csv
   evaluate_data: ../data/check/evaluate_data.csv
-  winning_evaluate: ../data/check/winning_evaluate.csv
 
 train:
   drop_columns_recommender: ['supplier', 'reg_code', 'is_winner',

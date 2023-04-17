@@ -12,6 +12,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
 
+from get_data import get_data
+
+
 
 def merge_dataframes(column: str, *dfs) -> pd.DataFrame:
     return pd.merge(dfs, on=column)
@@ -19,16 +22,10 @@ def merge_dataframes(column: str, *dfs) -> pd.DataFrame:
 def transform_ids(df: pd.DataFrame, column: str) -> pd.Series:
     return df[column].apply(lambda x: x.split('_')[1])
 
-def replace_values(df: pd.DataFrame, pattern: dict) -> pd.DataFrame:
-    return df.replace(pattern)
-
 def fill_nulls(df: pd.DataFrame,
                column_nulls: str,
                column_values: str) -> pd.Series:
     return df[column_nulls].fillna(df[column_values])
-
-def sort_dataframe(df: pd.DataFrame, *columns) -> pd.DataFrame:
-    return df.sort_values(columns)
 
 def lemmatize_text(row: dict, nlp, pos_to_include) -> list:
     doc = nlp(sum(value for value in row.values()))
@@ -78,21 +75,24 @@ def vectorize_tfidf_matrix(df_column: pd.Series, n_components):
     for row in tfidf_svd:
         yield row
 
-def pipeline_transform(df, **kwargs) -> pd.DataFrame:
-    for column in kwargs['change_ids_columns']:
+def pipeline_transform(preproc, df_sup, df_pur) -> pd.DataFrame:
+
+    df = pd.merge(df_sup, df_pur, on=preproc['merge_column'])
+
+    for column in preproc['change_ids_columns']:
         df[column] = transform_ids(df, column)
 
-    df = df.replace(kwargs['change_columns'])
+    df = df.replace(preproc['change_columns'])
 
-    for column in kwargs['fillna_columns']:
-        df[column] = fill_nulls(kwargs['fillna_columns'][column])
+    for column in preproc['fillna_columns']:
+        df[column] = fill_nulls(preproc['fillna_columns'][column])
 
-    df = df.sort_values(kwargs['sort_columns'])
+    df = df.sort_values(preproc['sort_columns'])
 
-    df['tokens'] = get_tokens(df, kwargs['text_columns'])
-    df = df.drop(columns=kwargs['text_columns'])
+    df['tokens'] = get_tokens(df, preproc['text_columns'])
+    df = df.drop(columns=preproc['text_columns'])
 
-    df['vectorized'] = list(vectorize_tfidf_matrix(df['tokens'], kwargs['n_components']))
+    df['vectorized'] = list(vectorize_tfidf_matrix(df['tokens'], preproc['n_components']))
     df= df.drop('tokens', axis=1)
 
     return df
@@ -116,23 +116,17 @@ def create_winner_submission(df: pd.DataFrame, column: str,
                              name: str) -> pd.DataFrame:
     return df[column].to_frame(name)
 
-def pipeline_split(df, **kwargs) -> tuple:
-    df = filter_data(df, kwargs['filter_column'])
+def pipeline_split(preproc, df) -> tuple:
 
-    tt_split = kwargs['train_test_split']
+    df = filter_data(df, preproc['filter_column'])
+
+    tt_split = preproc['train_test_split']
     df_train, df_test = train_test_split(df, test_size=tt_split['test_size'],
                                          random_state=tt_split['random_state'],
                                          stratify=tt_split['stratify'])
 
-    rec_sub = kwargs['recommend_submission']
-    df_recommend_submission = create_recommend_submission(df, rec_sub['groupby'],
-                                                          rec_sub['values'],
-                                                          rec_sub['name'])
 
-    win_sub = kwargs['winner_submission']
-    df_winner_submission = create_winner_submission(df, win_sub['column'], win_sub['name'])
-
-    return df_train, df_test, df_recommend_submission, df_winner_submission
+    return df_train, df_test
 
 
 def extract_month(df, column) -> pd.Series:
@@ -165,18 +159,17 @@ def extract_unique_okpd2(df_train: pd.DataFrame, df_test: pd.DataFrame, groupby:
 
     return df_train, df_test
 
-def pipeline_feature_engineering(df_train: pd.DataFrame, df_test: pd.DataFrame,
-                                 **kwargs) -> tuple:
+def pipeline_feature_engineering(preproc, df_train, df_test) -> tuple:
 
-    df_train['month'] = extract_month(df_train, kwargs['date'])
-    df_test['month'] = extract_month(df_test, kwargs['date'])
+    df_train['month'] = extract_month(df_train, preproc['date'])
+    df_test['month'] = extract_month(df_test, preproc['date'])
 
-    df_train['reg_code'] = extract_reg_code(df_train, kwargs['region'],
-                                            kwargs['okpd2'])
-    df_test['reg_code'] = extract_reg_code(df_test, kwargs['region'],
-                                           kwargs['okpd2'])
+    df_train['reg_code'] = extract_reg_code(df_train, preproc['region'],
+                                            preproc['okpd2'])
+    df_test['reg_code'] = extract_reg_code(df_test, preproc['region'],
+                                           preproc['okpd2'])
 
-    purchase = kwargs['purhcase']
+    purchase = preproc['purhcase']
     df_train = extract_purchase_size(df_train, purchase['groupby'],
                                      purchase['values'], purchase['name'],
                                      purchase['on'], purchase['how'])
@@ -184,17 +177,41 @@ def pipeline_feature_engineering(df_train: pd.DataFrame, df_test: pd.DataFrame,
                                      purchase['values'], purchase['name'],
                                      purchase['on'], purchase['how'])
 
-    flag = kwargs['flag']
+    flag = preproc['flag']
     df_train, df_test = extract_flag(df_train, df_test, flag['train_columns'],
                                      flag['groupby'], flag['on'], flag['how'])
 
-    uniq_okpd2 = kwargs['uniq_okpd2']
+    uniq_okpd2 = preproc['uniq_okpd2']
     df_train, df_test = extract_unique_okpd2(df_train, df_test, uniq_okpd2['groupby'],
                                              uniq_okpd2['values'], uniq_okpd2['on'],
                                              uniq_okpd2['name'])
 
-    df_train = df_train.drop(columns=kwargs['drop_columns'])
-    df_test = df_test.drop(columns=kwargs['drop_columns'])
+    df_train = df_train.drop(columns=preproc['drop_columns'])
+    df_test = df_test.drop(columns=preproc['drop_columns'])
 
     return df_train, df_test
 
+def pipeline_preprocessing(preproc):
+
+    rec_sub = preproc['recommend_submission']
+    win_sub = preproc['winner_submission']
+
+    df_sup = get_data(preproc['supplier_small_path'])
+    df_pur = get_data(preproc['purchase_small_path'])
+
+    df = pipeline_transform(df_sup, df_pur)
+
+    df_train, df_test = pipeline_split(preproc, df)
+
+    df_evaluate = df_test.copy()
+
+    df_train, df_test = pipeline_feature_engineering(preproc, df_train, df_test)
+
+    df_recommend_submission = create_recommend_submission(df_test, rec_sub['groupby'],
+                                                          rec_sub['values'],
+                                                          rec_sub['name'])
+
+    df_winner_submission = create_winner_submission(df_test, win_sub['column'],
+                                                    win_sub['name'])
+
+    return df_train, df_test, df_recommend_submission, df_winner_submission, df_evaluate
