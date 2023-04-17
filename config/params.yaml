@@ -1,4 +1,9 @@
 preprocessing:
+  change_ids_columns: ['purchase', 'supplier', 'customer']
+  fillna_columns:
+    item_descriptions: purchase_name
+    purchase_name: okpd2_names
+  sort_columns: ['supplier', 'min_publish_date']
   change_columns:
     forsmallbiz:
       t: 1
@@ -7,7 +12,39 @@ preprocessing:
     supplier: category
     reg_code: category
   drop_columns: ['region_code', 'okpd2_code', 'min_publish_date']
-  drop_text_columns: ['purchase_name', 'item_descriptions', 'okpd2_names']
+  text_columns: ['purchase_name', 'item_descriptions', 'okpd2_names']
+  n-components: 100
+  filter_column: supplier
+  train_test_split:
+    test_size: 0.2
+    random_state: 42
+    stratify: supplier
+  recommend_submission:
+    groupby: supplier
+    values: purchase
+    name: purchases
+  winner_submission:
+    column: is_winner
+    name: is_winner
+  month: min_publish_date
+  region: region
+  okpd2: okpd2_code
+  purchase:
+    groupby: purchase
+    values: supplier
+    name: purchase_size
+    on: purchase
+    how: outer
+  flag:
+    train_columns: ['supplier', 'customer', 'flag_won']
+    groupby: ['suppleir', 'customer']
+    on: ['supplier', 'customer']
+    how: left
+  uniq_okpd2:
+    groupby: suppleir
+    values: okpd2_code
+    on: supplier
+    name: n_unique_okpd2
   supplier_small_path: ../data/raw/small_suppliers.csv
   purchases_small_path: ../data/raw/small_purchases.csv
   supplier_path: ../data/raw/all_suppliers.csv
