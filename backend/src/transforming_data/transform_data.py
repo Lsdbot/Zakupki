@@ -1,5 +1,4 @@
-"""
-Программа: Преобразование данных
+"""Программа: Преобразование данных
 Версия: 1.0
 """
 
@@ -13,7 +12,6 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.decomposition import TruncatedSVD
 
 from get_data import get_data
-
 
 
 def merge_dataframes(column: str, *dfs) -> pd.DataFrame:
@@ -43,9 +41,6 @@ def get_tokens(df: pd.DataFrame, text_columns: list) -> pd.Series:
     pos_to_include = {'ADJ', 'NOUN', 'PROPN'}
 
     return process_rows(df, nlp, pos_to_include, text_columns)
-
-def drop_columns(df: pd.DataFrame, columns: list) -> pd.DataFrame:
-    return df.drop(columns=columns)
 
 def vectorize_tfidf_matrix(df_column: pd.Series, n_components):
     """
@@ -93,19 +88,13 @@ def pipeline_transform(preproc, df_sup, df_pur) -> pd.DataFrame:
     df = df.drop(columns=preproc['text_columns'])
 
     df['vectorized'] = list(vectorize_tfidf_matrix(df['tokens'], preproc['n_components']))
-    df= df.drop('tokens', axis=1)
+    df = df.drop('tokens', axis=1)
 
     return df
 
 def filter_data(df:pd.DataFrame, column: str, size: int) -> pd.DataFrame:
     true_false_seria = df.groupby(column).size() > size
     return df[df[column].isin(true_false_seria[true_false_seria].index)]
-
-def split_data(df: pd.DataFrame, test_size,
-               random_state, stratify_column) -> tuple:
-    return train_test_split(df, test_size=test_size,
-                            random_state=random_state,
-                            stratify=df[stratify_column])
 
 def create_recommend_submission(df: pd.DataFrame, column_groupby: str,
                                 column_values, name) -> pd.DataFrame:
@@ -116,9 +105,9 @@ def create_winner_submission(df: pd.DataFrame, column: str,
                              name: str) -> pd.DataFrame:
     return df[column].to_frame(name)
 
-def pipeline_split(preproc, df) -> tuple:
+def pipeline_split(df, preproc) -> tuple:
 
-    df = filter_data(df, preproc['filter_column'])
+    df = filter_data(df, preproc['filter_column'], preproc['size'])
 
     tt_split = preproc['train_test_split']
     df_train, df_test = train_test_split(df, test_size=tt_split['test_size'],
@@ -201,7 +190,7 @@ def pipeline_preprocessing(preproc):
 
     df = pipeline_transform(df_sup, df_pur)
 
-    df_train, df_test = pipeline_split(preproc, df)
+    df_train, df_test = pipeline_split(df, preproc)
 
     df_evaluate = df_test.copy()
 
