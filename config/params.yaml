@@ -74,19 +74,20 @@ train:
     index_column: purchase
     vector: vectorized_tokens
     n_trials: 30
-    test_size: 0.25
     random_state: 42
+    N_FOLDS: 4
     params: ../models/params/recommender_params.yaml
     models: ../models/models/recommender_models.joblib
     metrics: ../models/recommender_metrics.yaml
   win_predictor:
     drop_columns: ['vectorized_tokens', 'purchase', 'customer']
     cat_features: ['supplier', 'reg_code']
+    target: is_winner
+    n_trials: 10
     random_state: 42
     N_FOLDS: 4
-    test_size: 0.25
-    ensemble_params: ../models/params/ensemble_params.yaml
-    ensemble_models: ../models/models/ensemble_models.joblib
+    params: ../models/params/ensemble_params.yaml
+    models: ../models/models/ensemble_models.joblib
     metrics: ../models/win_metrics.yaml
 
 evaluate:

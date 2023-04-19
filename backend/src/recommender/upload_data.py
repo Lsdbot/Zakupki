@@ -9,14 +9,16 @@ import joblib
 from pipeline import pipeline_training
 
 
-def load_models(config_path, params_path, models_path, supplier_id):
+def load_model(config_path, params_path, models_path, supplier_id):
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
-    with open(params_path) as file:
+    train = config['train']['recommender']
+
+    with open(train['params']) as file:
         params = yaml.load(file, Loader=yaml.FullLoader)
 
-    with open(models_path) as file:
+    with open(train['models']) as file:
         models = yaml.load(file, Loader=yaml.FullLoader)
 
     model = pipeline_training(config, supplier_id)

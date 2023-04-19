@@ -11,54 +11,15 @@ from lightgbm import LGBMClassifier
 import optuna
 
 from sklearn.model_selection import StratifiedKFold
-from sklearn.metrics import roc_auc_score, precision_score, \
-                            recall_score, f1_score, log_loss
+from sklearn.metrics import roc_auc_score
 
 
-def get_metrics(y_test, y_pred, y_score) -> dict:
-    """Метрики для задачи классификации"""
-    metrics = {}
+def train_model(x_train, y_train, study) -> LGBMClassifier:
 
-    try:
-        metrics['ROC_AUC'] = roc_auc_score(y_test, y_score[:, 1])
-        metrics['Precision'] = precision_score(y_test, y_pred, zero_division=0)
-        metrics['Recall'] = recall_score(y_test, y_pred, zero_division=0)
-        metrics['f1'] = f1_score(y_test, y_pred, zero_division=0)
-        metrics['Logloss'] = log_loss(y_test, y_score)
+    params = study.best_params_
 
-    except ValueError:
-        metrics['ROC_AUC'] = 0
-        metrics['Precision'] = 0
-        metrics['Recall'] = 0
-        metrics['f1'] = 0
-        metrics['Logloss'] = 0
-
-    return metrics
-
-
-def supplier_data(df_train, df_submission, sup, **kwargs):
-
-    unique_reg_okpd = df_train[df_train[kwargs['suppplier_column']] == sup][kwargs['filter_column']].unique()
-
-    # фильтруем train на основе уникальных reg_code поставщиков
-    df_sup_train = df_train[df_train['filter_column'].isin(unique_reg_okpd)]
-
-    # удаляем ненужные для системы рекомендаций столбцы и дубликаты
-    df_sup_train = df_sup_train.drop(columns=kwargs['drop_columns_recommender']) \
-        .drop_duplicates()
-
-    df_sup_train = df_sup_train.set_index(kwargs['index_column'])
-
-    # удаляем закупки, которые есть и test, и в train
-    df_sup_train = df_sup_train.drop(set(df_submission[sup]).intersection(df_sup_train.index))
-
-    return df_sup_train
-
-
-def train_model(X, Y, study):
-
-    model = LGBMClassifier(n_jobs=-1, **study)
-    model.fit(X, Y)
+    model = LGBMClassifier(n_jobs=-1, **params)
+    model.fit(x_train, y_train)
 
     return model
 

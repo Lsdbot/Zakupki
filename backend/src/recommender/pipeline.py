@@ -8,7 +8,6 @@ from train import find_optimal_params, train_model
 from preprocessing import get_supplier_data
 
 
-
 def pipeline_training(config, supplier_id):
 
     preproc = config["preprocessing"]
@@ -26,13 +25,12 @@ def pipeline_training(config, supplier_id):
     train_data['target'] = train_data.index.isin(
         train_data[train_data[train['sup_column']] == supplier_id][train['index_column']].unique()).astype(int)
 
-    X = train_data[train_data.columns[:-1]]
-    Y = train_data['target']
+    x_train = train_data[train_data.columns[:-1]]
+    y_train = train_data['target']
 
-    study = find_optimal_params(X, Y, n_trials=train['n_trials'],
+    study = find_optimal_params(x_train, y_train, n_trials=train['n_trials'],
                                 N_FOLDS=train['N_FOLDS'])
 
-    model = train_model(X, Y, study)
+    model = train_model(x_train, y_train, study)
 
     return model
-
