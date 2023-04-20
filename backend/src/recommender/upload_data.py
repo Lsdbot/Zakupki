@@ -9,7 +9,7 @@ import joblib
 from pipeline import pipeline_training
 
 
-def load_model(config_path, params_path, models_path, supplier_id):
+def load_model(config_path, supplier_id):
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
@@ -26,5 +26,5 @@ def load_model(config_path, params_path, models_path, supplier_id):
     params[supplier_id] = model.params_
     models[supplier_id] = model
 
-    joblib.dump(params, params_path)
-    joblib.dump(models, models_path)
+    joblib.dump(params, train['params'])
+    joblib.dump(models, train['models'])

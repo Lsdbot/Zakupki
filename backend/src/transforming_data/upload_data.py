@@ -4,13 +4,11 @@
 """
 
 import yaml
-import pandas as pd
 
 from .transform_data import pipeline_preprocessing
 
 
 def load_data(config_path) -> None:
-
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
