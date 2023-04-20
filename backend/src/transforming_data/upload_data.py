@@ -6,10 +6,10 @@
 import yaml
 import pandas as pd
 
-from transform_data import pipeline_preprocessing
+from .transform_data import pipeline_preprocessing
 
 
-def load_processed_data(config_path) -> None:
+def load_data(config_path) -> None:
 
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
@@ -24,3 +24,4 @@ def load_processed_data(config_path) -> None:
     df_recommend_submission.to_csv(preproc['recommend_sub_path'], index_label='index')
     df_winner_submission.to_csv(preproc['winner_sub_path'], index_label='index')
     df_evaluate.to_csv(preproc['evaluate_data'], index_label='index')
+

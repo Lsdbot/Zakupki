@@ -14,7 +14,7 @@ preprocessing:
     reg_code: category
   drop_columns: ['region_code', 'okpd2_code', 'min_publish_date']
   text_columns: ['purchase_name', 'item_descriptions', 'okpd2_names']
-  n-components: 100
+  n_components: 100
   filter_column: supplier
   size: 5
   train_test_split:
@@ -22,47 +22,45 @@ preprocessing:
     random_state: 42
     stratify: supplier
   recommend_submission:
-    groupby: supplier
+    group: supplier
     values: purchase
     name: purchases
   winner_submission:
     column: is_winner
     name: is_winner
-  month: min_publish_date
+  date: min_publish_date
   region: region_code
   okpd2: okpd2_code
-  purchase:
-    groupby: purchase
+  purchase_size:
+    group: purchase
     values: supplier
     name: purchase_size
     on: purchase
     how: outer
   flag:
     train_columns: ['supplier', 'customer', 'flag_won']
-    groupby: ['supplier', 'customer']
+    group: ['supplier', 'customer']
     on: ['supplier', 'customer']
     how: left
   uniq_okpd2:
-    groupby: supplier
+    group: supplier
     values: okpd2_code
     on: supplier
     name: n_unique_okpd2
   recommender:
-    drop_columns: [ 'supplier', 'reg_code', 'is_winner',
-                    'vectorized_tokens', 'customer', 'flag_won',
-                    'purchase_size', 'n_unique_okpd2' ]
+    drop_columns: ['supplier', 'reg_code', 'is_winner',
+                   'vectorized_tokens', 'customer', 'flag_won',
+                   'purchase_size', 'n_unique_okpd2']
     filter_column: reg_code
     sup_column: supplier
     index_column: purchase
-  supplier_small_path: ../data/raw/small_suppliers.csv
-  purchases_small_path: ../data/raw/small_purchases.csv
-  supplier_path: ../data/raw/all_suppliers.csv
-  purchase_path: ../data/raw/all_purchases.csv
-  train_data: ../data/processed/train_data.csv
-  test_data: ../data/processed/test_data.csv
-  recommend_sub_path: ../data/check/recommend_submission.csv
-  winner_sub_path: ../data/check/winner_submission.csv
-  evaluate_data: ../data/check/evaluate_data.csv
+  supplier_path: /home/sergey/projects/zakupki/data/raw/small_suppliers.csv
+  purchases_path: /home/sergey/projects/zakupki/data/raw/small_purchases.csv
+  train_data: /home/sergey/projects/zakupki/data/processed/train_data.csv
+  test_data: /home/sergey/projects/zakupki/data/processed/test_data.csv
+  evaluate_data: /home/sergey/projects/zakupki/data/check/evaluate.csv
+  recommend_sub_path: /home/sergey/projects/zakupki/data/check/recommend_submission.csv
+  winner_sub_path: /home/sergey/projects/zakupki/data/check/winner_submission.csv
 
 train:
   recommender:
@@ -91,9 +89,9 @@ train:
     metrics: ../models/win_metrics.yaml
 
 evaluate:
-  submission: ../data/check/submission.csv
-  evaluate_data: ../data/check/evaluate_data.csv
-  winning_evaluate: ../data/check/winning_evaluate.csv
+  recommend_sub_path: ../data/check/recommend_submission.csv
+  winner_sub_path: ../data/check/winner_submission.csv
+  evaluate_data: ../data/check/evaluate.csv
 
 
 
