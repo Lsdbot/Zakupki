@@ -16,7 +16,7 @@ preprocessing:
   text_columns: ['purchase_name', 'item_descriptions', 'okpd2_names']
   n_components: 100
   filter_column: supplier
-  size: 5
+  size: 4
   train_test_split:
     test_size: 0.2
     random_state: 42
@@ -35,21 +35,19 @@ preprocessing:
     group: purchase
     values: supplier
     name: purchase_size
-    on: purchase
-    how: outer
+    on_col: purchase
   flag:
     train_columns: ['supplier', 'customer', 'flag_won']
     group: ['supplier', 'customer']
-    on: ['supplier', 'customer']
-    how: left
+    on_col: ['supplier', 'customer']
   uniq_okpd2:
     group: supplier
     values: okpd2_code
-    on: supplier
+    on_col: supplier
     name: n_unique_okpd2
   recommender:
     drop_columns: ['supplier', 'reg_code', 'is_winner',
-                   'vectorized_tokens', 'customer', 'flag_won',
+                   'vectorized', 'customer', 'flag_won',
                    'purchase_size', 'n_unique_okpd2']
     filter_column: reg_code
     sup_column: supplier
@@ -65,33 +63,33 @@ preprocessing:
 train:
   recommender:
     drop_columns: ['supplier', 'reg_code', 'is_winner',
-                   'vectorized_tokens', 'customer', 'flag_won',
+                   'vectorized', 'customer', 'flag_won',
                    'purchase_size', 'n_unique_okpd2']
     filter_column: reg_code
     sup_column: supplier
     index_column: purchase
-    vector: vectorized_tokens
+    vector: vectorized
     n_trials: 30
     random_state: 42
     N_FOLDS: 4
-    params: ../models/params/recommender_params.yaml
-    models: ../models/models/recommender_models.joblib
-    metrics: ../models/recommender_metrics.yaml
+    params: /home/sergey/projects/zakupki/models/params/recommender_params.yaml
+    models: /home/sergey/projects/zakupki/models/models/recommender_models.joblib
+    metrics: /home/sergey/projects/zakupki/models/recommender_metrics.yaml
   win_predictor:
-    drop_columns: ['vectorized_tokens', 'purchase', 'customer']
+    drop_columns: ['vectorized', 'purchase', 'customer']
     cat_features: ['supplier', 'reg_code']
     target: is_winner
     n_trials: 10
     random_state: 42
     N_FOLDS: 4
-    params: ../models/params/ensemble_params.yaml
-    models: ../models/models/ensemble_models.joblib
-    metrics: ../models/win_metrics.yaml
+    params: /home/sergey/projects/zakupki/models/params/ensemble_params.yaml
+    models: /home/sergey/projects/zakupki/models/models/ensemble_models.joblib
+    metrics: /home/sergey/projects/zakupki/models/win_metrics.yaml
 
 evaluate:
-  recommend_sub_path: ../data/check/recommend_submission.csv
-  winner_sub_path: ../data/check/winner_submission.csv
-  evaluate_data: ../data/check/evaluate.csv
+  recommend_sub_path: /home/sergey/projects/zakupki/data/check/recommend_submission.csv
+  winner_sub_path: /home/sergey/projects/zakupki/data/check/winner_submission.csv
+  evaluate_data: /home/sergey/projects/zakupki/data/check/evaluate.csv
 
 
 

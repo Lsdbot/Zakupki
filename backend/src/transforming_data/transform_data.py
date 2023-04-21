@@ -82,7 +82,7 @@ def pipeline_transform(preproc, df_sup, df_pur) -> pd.DataFrame:
     df['tokens'] = get_tokens(df)
     df = df.drop(columns=preproc['text_columns'])
 
-    df['vectorized'] = list(vectorize_tfidf_matrix(df['tokens'], preproc['n_components']))
+    df[preproc['vector']] = list(vectorize_tfidf_matrix(df['tokens'], preproc['n_components']))
     df = df.drop('tokens', axis=1)
 
     return df
@@ -100,7 +100,7 @@ def pipeline_split(df, preproc) -> tuple:
     tt_split = preproc['train_test_split']
     df_train, df_test = train_test_split(df, test_size=tt_split['test_size'],
                                          random_state=tt_split['random_state'],
-                                         stratify=tt_split['stratify'])
+                                         stratify=df[tt_split['stratify']])
 
     return df_train, df_test
 
@@ -113,29 +113,29 @@ def extract_reg_code(df, column_region, column_okpd2) -> pd.Series:
     return df[column_region].astype('str') + '_' + df[column_okpd2].astype('str')
 
 
-def extract_purchase_size(df, groupby, values, name, on, how) -> pd.DataFrame:
-    return df.merge(df.groupby(groupby)[values].size().to_frame(name),
-                    on=on, how=how)
+def extract_purchase_size(df, group, values, name, on_col,) -> pd.DataFrame:
+    return df.merge(df.groupby(group)[values].size().to_frame(name),
+                    on=on_col, how='outer')
 
 
 def extract_flag(df_train: pd.DataFrame, df_test: pd.DataFrame, train_columns: list,
-                 groupby: list, on: list, how: str) -> tuple:
+                 group: list, on_col: list) -> tuple:
     df_train['flag_won'] = df_train[df_train.is_winner == 1].groupby(
-        groupby).cumcount().apply(lambda x: 1 if x != 0 else 0)
+        group).cumcount().apply(lambda x: 1 if x != 0 else 0)
 
-    df_test = df_test.merge(df_train[train_columns].groupby(groupby).tail(1),
-                            on=on, how=how).fillna(0)
+    df_test = df_test.merge(df_train[train_columns].groupby(group).tail(1),
+                            on=on_col, how='left').fillna(0)
 
     return df_train.fillna(0), df_test
 
 
-def extract_unique_okpd2(df_train: pd.DataFrame, df_test: pd.DataFrame, groupby: str,
-                         values: str, on: str, name: str) -> tuple:
-    df_train = df_train.merge(df_train.groupby(groupby)[values].nunique().to_frame(name),
-                              how='outer', on=on)
+def extract_unique_okpd2(df_train: pd.DataFrame, df_test: pd.DataFrame, group: str,
+                         values: str, on_col: str, name: str) -> tuple:
+    df_train = df_train.merge(df_train.groupby(group)[values].nunique().to_frame(name),
+                              how='outer', on=on_col)
 
-    df_test = df_test.merge(df_train[[groupby, name]].groupby(groupby).tail(1),
-                            on=on, how='left').fillna(1)
+    df_test = df_test.merge(df_train[[group, name]].groupby(group).tail(1),
+                            on=on_col, how='left').fillna(1)
 
     return df_train, df_test
 
@@ -150,21 +150,21 @@ def pipeline_feature_engineering(preproc, df_train, df_test) -> tuple:
     df_test['reg_code'] = extract_reg_code(df_test, preproc['region'],
                                            preproc['okpd2'])
 
-    purchase = preproc['purchase']
-    df_train = extract_purchase_size(df_train, purchase['group'],
-                                     purchase['values'], purchase['name'],
-                                     purchase['on'], purchase['how'])
-    df_test = extract_purchase_size(df_test, purchase['group'],
-                                    purchase['values'], purchase['name'],
-                                    purchase['on'], purchase['how'])
+    purchase_s = preproc['purchase_size']
+    df_train = extract_purchase_size(df_train, purchase_s['group'],
+                                     purchase_s['values'], purchase_s['name'],
+                                     purchase_s['on_col'])
+    df_test = extract_purchase_size(df_test, purchase_s['group'],
+                                    purchase_s['values'], purchase_s['name'],
+                                    purchase_s['on_col'])
 
     flag = preproc['flag']
     df_train, df_test = extract_flag(df_train, df_test, flag['train_columns'],
-                                     flag['group'], flag['on'], flag['how'])
+                                     flag['group'], flag['on_col'])
 
     uniq_okpd2 = preproc['uniq_okpd2']
     df_train, df_test = extract_unique_okpd2(df_train, df_test, uniq_okpd2['group'],
-                                             uniq_okpd2['values'], uniq_okpd2['on'],
+                                             uniq_okpd2['values'], uniq_okpd2['on_col'],
                                              uniq_okpd2['name'])
 
     df_train = df_train.drop(columns=preproc['drop_columns'])

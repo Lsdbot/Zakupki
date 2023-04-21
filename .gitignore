@@ -3,6 +3,7 @@
 
 #Python
 .idea
+__pycache__/
 
 #csv files
 data/
@@ -13,3 +14,5 @@ notebooks/catboost_info/
 
 #models
 models/models/
+
+

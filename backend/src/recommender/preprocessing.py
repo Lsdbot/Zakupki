@@ -4,7 +4,7 @@
 """
 
 
-def get_supplier_data(df_train, df_test, sup, **kwargs):
+def get_supplier_data(df_train, df_test, sup, supplier_purchases, **kwargs):
     unique_reg_okpd = df_train[df_train[kwargs['sup_column']] == sup][kwargs['filter_column']].unique()
 
     # фильтруем train на основе уникальных reg_code поставщиков
@@ -19,11 +19,10 @@ def get_supplier_data(df_train, df_test, sup, **kwargs):
     df_sup_test = df_sup_test.drop(columns=kwargs['drop_columns']).drop_duplicates()
 
     df_sup_train = df_sup_train.set_index(kwargs['index_column'])
-    df_sup_train = df_sup_train.set_index(kwargs['index_column'])
+    df_sup_test = df_sup_test.set_index(kwargs['index_column'])
 
     # удаляем закупки, которые есть и test, и в train
-    df_sup_train = df_sup_train.drop(set(
-        df_sup_test[df_sup_test[kwargs['sup_column']] == sup].index).intersection(df_sup_train.index))
+    df_sup_train = df_sup_train.drop(set(supplier_purchases).intersection(df_sup_train.index))
     df_sup_test = df_sup_test[~df_sup_test.index.isin(df_sup_train.index)]
 
     return df_sup_train, df_sup_test

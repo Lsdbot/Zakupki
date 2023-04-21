@@ -16,7 +16,8 @@ def extract_purchases(string):
 
 def get_data(file_path, vector):
     df = pd.read_csv(file_path, index_col='index')
-    return df[vector].apply(extract_vector)
+    df[vector] = df[vector].apply(extract_vector)
+    return df
 
 
 def get_submission(file_path, purchases):

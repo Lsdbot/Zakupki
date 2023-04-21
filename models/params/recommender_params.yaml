@@ -1,32 +1,60 @@
 params: null
 1:
-  bagging_fraction: 0.8703035731944333
+  bagging_fraction: 0.7025375243034881
   bagging_freq: 5
+  boosting_type: gbdt
+  class_weight: null
+  colsample_bytree: 1.0
   extra_trees: true
-  feature_fraction: 0.7517852998373784
-  lambda_l1: 14
-  lambda_l2: 12
-  learning_rate: 2.004646599730065
+  feature_fraction: 0.3017845874665129
+  importance_type: split
+  lambda_l1: 0
+  lambda_l2: 24
+  learning_rate: 8.277638794305002
   max_bin: 90
-  max_depth: 5
+  max_depth: 10
   min_child_samples: 100
-  min_split_gain: 0.09909355140801336
-  n_estimators: 260
-  num_leaves: 120
+  min_child_weight: 0.001
+  min_split_gain: 0.06215009314278974
+  n_estimators: 160
+  n_jobs: -1
+  num_leaves: 480
+  objective: null
+  random_state: null
+  reg_alpha: 0.0
+  reg_lambda: 0.0
+  silent: warn
+  subsample: 1.0
+  subsample_for_bin: 200000
+  subsample_freq: 0
 2:
-  bagging_fraction: 0.7662673038967551
-  bagging_freq: 2
-  extra_trees: false
-  feature_fraction: 0.6125165235612525
-  lambda_l1: 40
-  lambda_l2: 51
-  learning_rate: 0.19682064704450003
-  max_bin: 100
-  max_depth: 9
-  min_child_samples: 100
-  min_split_gain: 0.01650133125814186
-  n_estimators: 90
-  num_leaves: 20
+  bagging_fraction: 0.5703286474709738
+  bagging_freq: 5
+  boosting_type: gbdt
+  class_weight: null
+  colsample_bytree: 1.0
+  extra_trees: true
+  feature_fraction: 0.39319050587734844
+  importance_type: split
+  lambda_l1: 7
+  lambda_l2: 89
+  learning_rate: 4.727788070591143
+  max_bin: 110
+  max_depth: 3
+  min_child_samples: 3500
+  min_child_weight: 0.001
+  min_split_gain: 0.011998774454430228
+  n_estimators: 40
+  n_jobs: -1
+  num_leaves: 280
+  objective: null
+  random_state: null
+  reg_alpha: 0.0
+  reg_lambda: 0.0
+  silent: warn
+  subsample: 1.0
+  subsample_for_bin: 200000
+  subsample_freq: 0
 3:
   bagging_fraction: 0.6247884314496686
   bagging_freq: 2

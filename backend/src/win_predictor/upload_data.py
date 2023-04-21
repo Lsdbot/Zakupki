@@ -6,7 +6,7 @@
 import yaml
 import joblib
 
-from pipeline import pipeline_training
+from .pipeline import pipeline_training
 
 
 def load_model(config_path):

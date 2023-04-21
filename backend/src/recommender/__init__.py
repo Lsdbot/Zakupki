@@ -1,1 +1,1 @@
-from upload_data import *
+from .upload_data import *

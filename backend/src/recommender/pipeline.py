@@ -14,14 +14,22 @@ def pipeline_training(config, supplier_id):
     train = config["train"]["recommender"]
 
     train_data = get_data(preproc['train_data'], train['vector'])
+    test_data = get_data(preproc['test_data'], train['vector'])
+
+    test_purchases = test_data[test_data[preproc['recommender']['sup_column']] ==
+                               supplier_id][preproc['recommender']['index_column']].tolist()
+    train_purchases = train_data[train_data[preproc['recommender']['sup_column']] ==
+                                 supplier_id][preproc['recommender']['index_column']].tolist()
 
     for i in range(preproc['n_components']):
         train_data[str(i)] = train_data[train['vector']].apply(lambda x: x[i])
+        test_data[str(i)] = test_data[train['vector']].apply(lambda x: x[i])
 
-    train_data = get_supplier_data(train_data, supplier_id, **preproc['recommender'])
+    train_data, test_data = get_supplier_data(train_data, test_data,
+                                              supplier_id, test_purchases,
+                                              **preproc['recommender'])
 
-    train_data['target'] = train_data.index.isin(
-        train_data[train_data[train['sup_column']] == supplier_id][train['index_column']].unique()).astype(int)
+    train_data['target'] = train_data.index.isin(train_purchases).astype(int)
 
     x_train = train_data[train_data.columns[:-1]]
     y_train = train_data['target']

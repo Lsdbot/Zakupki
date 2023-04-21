@@ -18,12 +18,14 @@ def extract_vector(string):
 
 def get_data(file_path, vector):
     df = pd.read_csv(file_path, index_col='index')
-    return df[vector].apply(extract_vector)
+    df[vector] = df[vector].apply(extract_vector)
+    return df
 
 
 def get_recommender_submission(filepath, vector):
     recommender_sub = pd.read_csv(filepath, index_col='index')
-    return recommender_sub[vector].apply(extract_purchases)
+    recommender_sub[vector] = recommender_sub[vector].apply(extract_purchases)
+    return recommender_sub
 
 
 def get_win_submission(filepath):

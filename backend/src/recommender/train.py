@@ -16,7 +16,7 @@ from sklearn.metrics import roc_auc_score
 
 def train_model(x_train, y_train, study) -> LGBMClassifier:
 
-    params = study.best_params_
+    params = study.best_params
 
     model = LGBMClassifier(n_jobs=-1, **params)
     model.fit(x_train, y_train)
@@ -38,9 +38,9 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
         float: The mean of the cross-validation AUC-ROC scores for the given set of hyperparameters.
     """
     params = {
-        'n_estimators': trial.suggest_categorical('n_estimators', [300]),
-        'learning_rate': trial.suggest_float('learning_rate', 0.001, 3),
-        'max_bin': trial.suggest_int('max_bin', 0, 120, step=10),
+        'n_estimators': trial.suggest_int('n_estimators', 40, 400, step=20),
+        'learning_rate': trial.suggest_float('learning_rate', 0.001, 10),
+        'max_bin': trial.suggest_int('max_bin', 10, 120, step=10),
         'num_leaves': trial.suggest_int('num_leaves', 20, 500, step=20),
         'max_depth': trial.suggest_int('max_depth', 3, 10),
         'min_child_samples': trial.suggest_int('min_child_samples', 100, 5000, step=100),
