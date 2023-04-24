@@ -3,8 +3,24 @@
 Версия: 1.0
 """
 
+from pandas import DataFrame
 
-def get_supplier_data(df_train, df_test, sup, supplier_purchases, **kwargs):
+
+def get_supplier_data(df_train: DataFrame, df_test: DataFrame, sup: int, supplier_purchases: list,
+                      **kwargs) -> tuple:
+    """
+    Получает данные поставщика и фильтрует их на основе уникальных reg_code поставщиков.
+    Удаляет ненужные для системы рекомендаций столбцы и дубликаты.
+    Удаляет закупки, которые есть и test, и в train.
+
+    :param df_train: обучающая выборка
+    :param df_test: тестовая выборка
+    :param sup: код поставщика
+    :param supplier_purchases: закупки поставщика
+    :param kwargs: дополнительные аргументы - filter_column, drop_columns, index_column
+
+    :return: кортеж из фильтрованных train и test данных поставщика
+    """
     unique_reg_okpd = df_train[df_train[kwargs['sup_column']] == sup][kwargs['filter_column']].unique()
 
     # фильтруем train на основе уникальных reg_code поставщиков
@@ -26,3 +42,5 @@ def get_supplier_data(df_train, df_test, sup, supplier_purchases, **kwargs):
     df_sup_test = df_sup_test[~df_sup_test.index.isin(df_sup_train.index)]
 
     return df_sup_train, df_sup_test
+
+

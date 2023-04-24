@@ -9,7 +9,15 @@ from .train import find_optimal_params, train_model
 
 
 def pipeline_training(config):
+    """
+    Функция для обучения модели, включающая в себя предобработку данных,
+    оптимизацию параметров модели и обучение модели на полученных данных.
 
+    :param config: словарь с конфигурацией
+    :return: модель
+    """
+
+    # Получение данных и их предобработка
     preproc = config["preprocessing"]
     train = config["train"]["win_predictor"]
 
@@ -21,8 +29,10 @@ def pipeline_training(config):
     x_train = train_data.drop(train['target'], axis=1)
     y_train = train_data[train['target']]
 
+    # Оптимизация параметров модели
     study = find_optimal_params(x_train, y_train, **train)
 
+    # Обучение модели
     model = train_model(x_train, y_train, train['cat_features'],
                         **study.best_params)
 

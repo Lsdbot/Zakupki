@@ -6,6 +6,8 @@
 import pandas as pd
 import numpy as np
 
+from typing import List
+
 from catboost import CatBoostClassifier
 
 import optuna
@@ -15,7 +17,21 @@ from sklearn.metrics import roc_auc_score
 
 
 def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> np.ndarray:
+    """
+    Функция для оптимизации параметров модели CatBoostClassifier с помощью библиотеки Optuna.
 
+    Аргументы:
+        trial (optuna.Trial): Объект для оптимизации параметров модели.
+        x (pd.DataFrame): Признаки для обучения модели.
+        y (pd.Series): Целевая переменная для обучения модели.
+        **kwargs: Дополнительные аргументы, включая число разбиений для кросс-валидации, категориальные признаки
+        и случайное состояние.
+
+    Возвращает:
+        np.ndarray: Среднее значение ROC AUC для кросс-валидации по заданному числу разбиений.
+
+    """
+    # Определяем параметры модели
     params = {
         'n_estimators': trial.suggest_categorical('n_estimators', [1000]),
         'learning_rate': trial.suggest_float('learning_rate', 0.0001, 0.1),
@@ -28,13 +44,18 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
         'random_state': kwargs['random_state']
     }
 
+    # Инициализируем массив для предсказаний на каждом фолде
     cv_pred = np.empty(kwargs['N_FOLDS'])
+
+    # Создаем разбиения для кросс-валидации
     cv = StratifiedKFold(n_splits=kwargs['N_FOLDS'], shuffle=True, random_state=kwargs['random_state'])
 
+    # Обучаем модель на каждом фолде
     for fold, (train_idx, test_idx) in enumerate(cv.split(x, y)):
         x_train_, x_val_ = x.iloc[train_idx], x.iloc[test_idx]
         y_train_, y_val_ = y.iloc[train_idx], y.iloc[test_idx]
 
+        # Определяем отношение числа объектов первого класса к числу объектов второго класса
         ratio = y_train_[y_train_ == 0].shape[0] / \
             y_train_[y_train_ == 1].shape[0]
 
@@ -55,27 +76,60 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
     return np.mean(cv_pred)
 
 
-def train_model(x_train, y_train, cat_features, params) -> CatBoostClassifier:
+def train_model(x_train: pd.DataFrame, y_train: pd.Series,
+                cat_features: List[int], params: dict) -> CatBoostClassifier:
+    """
+    Обучает модель CatBoost с помощью заданных параметров.
 
+    Аргументы:
+    x_train -- обучающие данные в виде таблицы pandas DataFrame;
+    y_train -- метки классов для обучающих данных в виде pandas Series;
+    cat_features -- список индексов категориальных признаков в x_train;
+    params -- словарь параметров для модели CatBoost.
+
+    Возвращает:
+    Обученную модель CatBoostClassifier.
+    """
+
+    # Вычисляем соотношение классов
     ratio = y_train[y_train == 0].shape[0] / y_train[y_train == 1].shape[0]
 
+    # Создаем модель CatBoostClassifier
     model = CatBoostClassifier(scale_pos_weight=ratio,
                                cat_features=cat_features,
                                **params)
 
+    # Обучаем модель на обучающих данных
     model.fit(x_train, y_train, verbose=0)
 
+    # Возвращаем обученную модель
     return model
 
 
-def find_optimal_params(x_train, y_train, **kwargs) -> optuna.Study:
+def find_optimal_params(x_train: pd.DataFrame, y_train: pd.Series,
+                        **kwargs: dict) -> optuna.Study:
+    """
+    Поиск оптимальных параметров модели с помощью оптимизации гиперпараметров с помощью библиотеки Optuna.
 
+    Аргументы:
+    x_train -- обучающие данные в виде таблицы pandas DataFrame;
+    y_train -- метки классов для обучающих данных в виде pandas Series;
+    **kwargs -- словарь с параметрами для кросс-валидации и поиска гиперпараметров.
+
+    Возвращает:
+    Объект класса optuna.Study со списком найденных оптимальных параметров модели.
+    """
+
+    # Определяем функцию для оптимизации
     func = lambda trial: objective(trial, x_train, y_train,
                                    N_FOLDS=kwargs['N_FOLDS'],
                                    random_state=kwargs['random_state'],
                                    cat_features=kwargs['cat_features'])
 
+    # Создаем объект Study и запускаем оптимизацию
     study = optuna.create_study(direction="maximize")
     study.optimize(func, show_progress_bar=True, n_trials=kwargs['n_trials'], n_jobs=6)
 
+    # Возвращаем объект Study с найденными оптимальными параметрами
     return study
+

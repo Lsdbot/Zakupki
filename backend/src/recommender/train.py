@@ -84,11 +84,25 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
     return np.mean(cv_pred)
 
 
-def find_optimal_params(x_train, y_train, **kwargs) -> optuna.Study:
+def find_optimal_params(x_train: pd.DataFrame, y_train: pd.Series, **kwargs: dict) -> optuna.Study:
+    """Find optimal hyperparameters using Optuna.
 
-    func = lambda trial: objective(trial, x_train, y_train, N_FOLDS=kwargs['N_FOLDS'],
-                                   random_state=kwargs['random_state'])
+    Args:
+    x_train: Pandas dataframe, training feature matrix.
+    y_train: Pandas series, training target vector.
+    **kwargs: Dictionary with additional arguments:
+        - N_FOLDS: int, number of cross-validation folds.
+        - random_state: int, random state for reproducibility.
+        - n_trials: int, number of trials in the optimization.
+
+    Returns:
+    optuna.Study: Object containing the results of the hyperparameter optimization.
+    """
+
+    def func(trial):
+        return objective(trial, x_train, y_train, N_FOLDS=kwargs['N_FOLDS'], random_state=kwargs['random_state'])
 
     study = optuna.create_study(direction="maximize")
     study.optimize(func, n_trials=kwargs['n_trials'], n_jobs=-1)
+
     return study

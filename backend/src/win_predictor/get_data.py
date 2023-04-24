@@ -6,5 +6,5 @@
 import pandas as pd
 
 
-def get_data(filepath):
+def get_data(filepath: str) -> pd.DataFrame:
     return pd.read_csv(filepath, index_col='index')
