@@ -27,12 +27,6 @@ def get_data(file_path: str, vector: str) -> pd.DataFrame:
     return df
 
 
-def get_recommender_submission(filepath: str, vector: str) -> pd.DataFrame:
-    recommender_sub = pd.read_csv(filepath, index_col='index')
-    recommender_sub[vector] = recommender_sub[vector].apply(extract_purchases)
-    return recommender_sub
-
-
 def get_recommend_model(filepath: str, supplier_id: int) -> LGBMClassifier:
     models = joblib.load(filepath)
     return models[supplier_id]
@@ -43,4 +37,4 @@ def get_win_submission(filepath: str) -> pd.DataFrame:
 
 
 def get_win_model(filepath: str) -> CatBoostClassifier:
-    return joblib.load(filepath)
+    return joblib.load(filepath)['catboost']

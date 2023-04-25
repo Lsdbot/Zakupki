@@ -67,7 +67,7 @@ def generate_features(train_data: pd.DataFrame, df_test: pd.DataFrame, preproc: 
 
 
 def get_supplier_data(df_train: pd.DataFrame, df_test: pd.DataFrame, sup: int, supplier_purchases: list,
-                      **kwargs) -> tuple:
+                      **kwargs) -> pd.DataFrame:
     """
     Получает данные поставщика и фильтрует их на основе уникальных reg_code поставщиков.
     Удаляет ненужные для системы рекомендаций столбцы и дубликаты.
@@ -79,7 +79,7 @@ def get_supplier_data(df_train: pd.DataFrame, df_test: pd.DataFrame, sup: int, s
     :param supplier_purchases: закупки поставщика
     :param kwargs: дополнительные аргументы - filter_column, drop_columns, index_column
 
-    :return: кортеж из фильтрованных train и test данных поставщика
+    :return: кортеж из фильтрованных test данных поставщика
     """
     unique_reg_okpd = df_train[df_train[kwargs['sup_column']] == sup][kwargs['filter_column']].unique()
 

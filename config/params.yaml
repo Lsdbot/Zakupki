@@ -69,7 +69,7 @@ train:
     sup_column: supplier
     index_column: purchase
     vector: vectorized
-    n_trials: 30
+    n_trials: 20
     random_state: 42
     N_FOLDS: 4
     params: /home/sergey/projects/zakupki/models/params/recommender_params.yaml

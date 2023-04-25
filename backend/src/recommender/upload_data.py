@@ -9,7 +9,7 @@ import joblib
 from .pipeline import pipeline_training
 
 
-def load_model(config_path: str, supplier_id: str) -> None:
+def load_model(config_path: str, supplier_id: int) -> None:
     """
     Загружает предварительно обученную модель машинного обучения для конкретного поставщика из файла конфигурации.
 
@@ -27,6 +27,8 @@ def load_model(config_path: str, supplier_id: str) -> None:
 
     # получение параметров модели из конфигурации
     train = config['train']['recommender']
+
+    # загрузка конфигурации параметров моделей
     with open(train['params']) as file:
         params = yaml.load(file, Loader=yaml.FullLoader)
 

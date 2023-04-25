@@ -3,6 +3,8 @@
 Версия: 1.0
 """
 
+import yaml
+
 from .get_data import get_data
 
 from .train import find_optimal_params, train_model
@@ -30,10 +32,13 @@ def pipeline_training(config):
     y_train = train_data[train['target']]
 
     # Оптимизация параметров модели
-    study = find_optimal_params(x_train, y_train, **train)
+    #study = find_optimal_params(x_train, y_train, **train)
+
+    with open(train['params']) as file:
+        params = yaml.load(file, Loader=yaml.FullLoader)
 
     # Обучение модели
     model = train_model(x_train, y_train, train['cat_features'],
-                        **study.best_params)
+                        **params['catboost'])
 
     return model

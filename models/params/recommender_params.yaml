@@ -29,19 +29,33 @@ params: null
   subsample_for_bin: 200000
   subsample_freq: 0
 3:
-  bagging_fraction: 0.6247884314496686
-  bagging_freq: 2
+  bagging_fraction: 0.8664350972613843
+  bagging_freq: 5
+  boosting_type: gbdt
+  class_weight: null
+  colsample_bytree: 1.0
   extra_trees: true
-  feature_fraction: 0.6824047379943688
-  lambda_l1: 16
-  lambda_l2: 30
-  learning_rate: 1.4552840358504293
-  max_bin: 70
-  max_depth: 11
-  min_child_samples: 100
-  min_split_gain: 0.09424959098749751
-  n_estimators: 120
-  num_leaves: 440
+  feature_fraction: 0.7727117123328711
+  importance_type: split
+  lambda_l1: 60
+  lambda_l2: 89
+  learning_rate: 5.863625572718461
+  max_bin: 50
+  max_depth: 3
+  min_child_samples: 4100
+  min_child_weight: 0.001
+  min_split_gain: 0.008103168619673607
+  n_estimators: 80
+  n_jobs: -1
+  num_leaves: 280
+  objective: null
+  random_state: null
+  reg_alpha: 0.0
+  reg_lambda: 0.0
+  silent: warn
+  subsample: 1.0
+  subsample_for_bin: 200000
+  subsample_freq: 0
 4:
   bagging_fraction: 0.9993645909891831
   bagging_freq: 2

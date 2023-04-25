@@ -34,7 +34,8 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
     # Определяем параметры модели
     params = {
         'n_estimators': trial.suggest_categorical('n_estimators', [1000]),
-        'learning_rate': trial.suggest_float('learning_rate', 0.0001, 0.1),
+        # 'learning_rate': trial.suggest_float('learning_rate', 0.0001, 1),
+        'learning_rate': trial.suggest_categorical('learning_rate', [0.0787449098272658]),
         'depth': trial.suggest_int('depth', 4, 10),
         'l2_leaf_reg': trial.suggest_float('l2_leaf_reg', 0.0001, 100),
         'random_strength': trial.suggest_float('random_strength', 10, 50),
@@ -77,7 +78,7 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
 
 
 def train_model(x_train: pd.DataFrame, y_train: pd.Series,
-                cat_features: List[int], params: dict) -> CatBoostClassifier:
+                cat_features: List[int], **params) -> CatBoostClassifier:
     """
     Обучает модель CatBoost с помощью заданных параметров.
 

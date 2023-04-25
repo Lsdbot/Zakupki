@@ -266,7 +266,7 @@ def pipeline_preprocessing(preproc: dict) -> tuple:
     df_train, df_test = pipeline_split(df, preproc)
 
     # Выделение данных для оценки модели
-    df_evaluate = df_test.drop('is_winner', axis=1)
+    df_evaluate = df_test.copy()
 
     # Применение feature engineering
     df_train, df_test = pipeline_feature_engineering(preproc, df_train, df_test)
