@@ -6,7 +6,7 @@
 __pycache__/
 
 #csv files
-data/
+/data/
 notebooks/*.csv
 
 #catboost files

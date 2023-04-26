@@ -92,6 +92,11 @@ evaluate:
   winner_sub_path: /home/sergey/projects/zakupki/data/check/winner_submission.csv
   evaluate_data: /home/sergey/projects/zakupki/data/check/evaluate.csv
 
-
+endpoints:
+  train_recommender: "http://localhost:8000/load-recommender-model/"
+  train_win_predictor: "http://localhost:8000/load-win-predictor-model"
+  evaluate_recommender: "http://localhost:8000/load-evaluation-data/recommends/"
+  evaluate_win_predictor: "http://localhost:8000/load-evaluation-data/win_predict"
+  train_evaluate_recommender: "http://localhost:8000/load-all-data/{user_id}"
 
     

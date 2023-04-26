@@ -13,10 +13,6 @@ from lightgbm import LGBMClassifier
 from catboost import CatBoostClassifier
 
 
-def extract_purchases(string: str) -> list:
-    return list(map(int, re.findall(r"'(\d+)'", string)))
-
-
 def extract_vector(string: str) -> list:
     return list(map(float, string[1:-1].split()))
 
