@@ -3,8 +3,6 @@
 Версия: 1.0
 """
 
-import numpy as np
-
 from .get_data import get_data, get_recommend_model, get_win_model
 from .evaluate import get_supplier_data, generate_features, transform_vector
 

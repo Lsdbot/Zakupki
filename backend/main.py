@@ -37,9 +37,9 @@ async def load_win_predictor_model():
     global CONFIG_PATH
 
     # Загрузка модели прогнозирования побед
-    params = win_predictor.load_model(CONFIG_PATH)
+    win_predictor.load_model(CONFIG_PATH)
 
-    return f"Модель прогнозирования загружена с параметрами: {params}"
+    return f"Модель прогнозирования загружена."
 
 
 @app.post("/load-evaluation-data/recommends/{user_id}")
@@ -74,11 +74,6 @@ async def load_all_data(user_id: int):
     response_evaluation = await load_evaluation_recommends(user_id)
 
     return f"{response_recommender}. {response_evaluation}"
-
-# @app.on_event("startup")
-# async def startup_event():
-#     # Запуск приложения
-#     print("Приложение запущено")
 
 
 if __name__ == '__main__':

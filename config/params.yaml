@@ -52,13 +52,13 @@ preprocessing:
     filter_column: reg_code
     sup_column: supplier
     index_column: purchase
-  supplier_path: /home/sergey/projects/zakupki/data/raw/small_suppliers.csv
-  purchases_path: /home/sergey/projects/zakupki/data/raw/small_purchases.csv
-  train_data: /home/sergey/projects/zakupki/data/processed/train_data.csv
-  test_data: /home/sergey/projects/zakupki/data/processed/test_data.csv
-  evaluate_data: /home/sergey/projects/zakupki/data/check/evaluate.csv
-  recommend_sub_path: /home/sergey/projects/zakupki/data/check/recommend_submission.csv
-  winner_sub_path: /home/sergey/projects/zakupki/data/check/winner_submission.csv
+  supplier_path: ../data/raw/small_suppliers.csv
+  purchases_path: ../data/raw/small_purchases.csv
+  train_data: ../data/processed/train_data.csv
+  test_data: ../data/processed/test_data.csv
+  evaluate_data: ../data/check/evaluate.csv
+  recommend_sub_path: ../data/check/recommend_submission.csv
+  winner_sub_path: ../data/check/winner_submission.csv
 
 train:
   recommender:

@@ -7,7 +7,7 @@ import yaml
 
 from .get_data import get_data
 
-from .train import find_optimal_params, train_model
+from .train import train_model
 
 
 def pipeline_training(config):

@@ -4,13 +4,12 @@
 """
 
 import yaml
-
-from typing import Dict
+import joblib
 
 from .pipeline import pipeline_training
 
 
-def load_model(config_path: str) -> Dict[str, any]:
+def load_model(config_path: str) -> None:
     """
     Загружает конфигурацию модели из указанного файла config_path,
     запускает pipeline_training для обучения модели и возвращает параметры обученной модели.
@@ -24,6 +23,8 @@ def load_model(config_path: str) -> Dict[str, any]:
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)
 
-    model = pipeline_training(config)
+    models = joblib.load(config['train']['win_predictor']['models'])
 
-    return model.get_params()
+    models['catboost'] = pipeline_training(config)
+
+    joblib.dump(models, config['train']['win_predictor']['models'])

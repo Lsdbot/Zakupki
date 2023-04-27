@@ -1,0 +1,16 @@
+catboost~=1.1.1
+fastapi~=0.92.0
+joblib~=1.2.0
+numpy~=1.23.5
+optuna~=3.1.0
+pandas~=1.5.3
+ru-core-news-sm~=3.5.0
+scikit-learn~=1.2.1
+scipy~=1.10.1
+spacy~=3.5.1
+uvicorn~=0.20.0
+xgboost~=1.7.4
+lightgbm~=3.3.5
+PyYAML~=6.0
+multiprocess~=0.70.14
+tqdm~=4.64.1

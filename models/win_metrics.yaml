@@ -1,0 +1,37 @@
+basic_metrics:
+  catboost:
+    Accuracy: 0.649
+    Logloss: 1.499
+    Precision: 0.495
+    ROC_AUC: 0.796
+    Recall: 0.864
+    f1: 0.63
+  xgboost:
+    Accuracy: 0.649
+    Logloss: 1.133
+    Precision: 0.495
+    ROC_AUC: 0.78
+    Recall: 0.845
+    f1: 0.624
+best_metrics:
+  catboost:
+    Accuracy: 0.651
+    Logloss: 1.377
+    Precision: 0.497
+    ROC_AUC: 0.798
+    Recall: 0.864
+    f1: 0.631
+  xgboost:
+    Accuracy: 0.633
+    Logloss: 1.27
+    Precision: 0.483
+    ROC_AUC: 0.786
+    Recall: 0.868
+    f1: 0.621
+ensemble_metrics:
+  Accuracy: 0.643
+  Logloss: 2.919
+  Precision: 0.491
+  ROC_AUC: 0.799
+  Recall: 0.869
+  f1: 0.627

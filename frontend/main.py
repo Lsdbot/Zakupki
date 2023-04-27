@@ -198,6 +198,34 @@ def get_predicts():
         evaluation.evaluate_win_predictor(endpoint)
 
 
+def get_metrics():
+    """
+    Вывод метрик качества
+    """
+    # заголовок страницы
+    st.title("Метрики качества")
+
+    with open(CONFIG_PATH) as file:
+        config = yaml.load(file, Loader=yaml.FullLoader)
+
+    with open(config['train']['recommender']['metrics']) as file:
+        recommender_metrics = yaml.load(file, Loader=yaml.FullLoader)
+
+    with open(config['train']['win_predictor']['metrics']) as file:
+        win_predictor_metrics = yaml.load(file, Loader=yaml.FullLoader)
+
+
+    dict_metrics = {
+        "Базовые метрики модели рекомендаций": recommender_metrics['basic_metrics'],
+        "Лучшие метрики модели рекомендаций": recommender_metrics['best_metrics'],
+        "Базовые метрики модели прогнозирования": win_predictor_metrics['basic_metrics']['catboost'],
+        "Лучшие метрики модели прогнозирования": win_predictor_metrics['best_metrics']['catboost']
+    }
+
+    type_metric = st.sidebar.selectbox("Метрики качества", dict_metrics.keys())
+    st.write(dict_metrics[type_metric])
+
+
 def main():
     """
     Сборка пайплайна в одном блоке
@@ -208,7 +236,8 @@ def main():
         "Тренировка рекомендательной модели": train_recommender,
         "Тренировка прогнозирующей модели": train_win_predictor,
         "Получение рекомендаций": get_recommends,
-        "Получение прогнозов победителя": get_predicts
+        "Получение прогнозов победителя": get_predicts,
+        "Метрики качества моделей": get_metrics
     }
     page = st.sidebar.selectbox("Выберите пункт", pages_to_funcs.keys())
     pages_to_funcs[page]()

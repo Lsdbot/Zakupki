@@ -5,8 +5,6 @@
 
 import pandas as pd
 
-import re
-
 import joblib
 
 from lightgbm import LGBMClassifier
