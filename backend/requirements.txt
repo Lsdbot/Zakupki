@@ -4,10 +4,10 @@ joblib~=1.2.0
 numpy~=1.23.5
 optuna~=3.1.0
 pandas~=1.5.3
-ru-core-news-sm~=3.5.0
 scikit-learn~=1.2.1
 scipy~=1.10.1
-spacy~=3.5.1
+spacy==3.5.1
+ru_core_news_sm @ https://github.com/explosion/spacy-models/releases/download/ru_core_news_sm-3.5.0/ru_core_news_sm-3.5.0-py3-none-any.whl
 uvicorn~=0.20.0
 xgboost~=1.7.4
 lightgbm~=3.3.5

@@ -1,4 +1,4 @@
-import spacy
+import ru_core_news_sm
 
 import os
 
@@ -10,7 +10,11 @@ import uvicorn
 
 
 app = FastAPI()
-CONFIG_PATH = "/home/sergey/projects/zakupki/config/params.yaml"
+CONFIG_PATH = "../config/params.yaml"
+
+USERS = evaluation.load_users(CONFIG_PATH)
+
+RECOMMENDER_LOADED_USERS = []
 
 
 @app.get("/")
@@ -18,21 +22,21 @@ async def home():
     return "Это стартовая страница пользователя"
 
 
-@app.post("/load-recommender-model/{user_id}")
+@app.get("/load-recommender-model/{user_id}")
 async def load_recommender_model(user_id: int):
-    global users, recommender_loaded_users, CONFIG_PATH
+    global USERS, RECOMMENDER_LOADED_USERS, CONFIG_PATH
 
-    if user_id not in users:
+    if user_id not in USERS:
         return f"Пользователь с id={user_id} отсутствует в базе данных"
 
     # Загрузка модели рекомендательной системы
     recommender.load_model(CONFIG_PATH, user_id)
-    recommender_loaded_users.append(user_id)
+    RECOMMENDER_LOADED_USERS.append(user_id)
 
     return f"Модель рекомендательной системы загружена для пользователя {user_id}"
 
 
-@app.post("/load-win-predictor-model")
+@app.get("/load-win-predictor-model")
 async def load_win_predictor_model():
     global CONFIG_PATH
 
@@ -42,22 +46,24 @@ async def load_win_predictor_model():
     return f"Модель прогнозирования загружена."
 
 
-@app.post("/load-evaluation-data/recommends/{user_id}")
+@app.get("/load-evaluate-recommends/{user_id}")
 async def load_evaluation_recommends(user_id: int):
-    global recommender_loaded_users, CONFIG_PATH
+    global RECOMMENDER_LOADED_USERS, CONFIG_PATH
 
     # Проверка, вызывалась ли функция load_recommender_model с данным id пользователя в текущем сеансе
-    if user_id not in recommender_loaded_users:
+    if user_id not in RECOMMENDER_LOADED_USERS:
         return f"Модель рекомендательной системы не загружена для пользователя {user_id}"
 
     # Загрузка данных для оценки рекомендательной системы
     recommends = evaluation.load_recommends(CONFIG_PATH, user_id)
 
-    return f"Данные проверки успешно загружены. \
-    Рекомендуемые id закупок для пользователя {user_id} следующие: {recommends}"
+    if len(recommends) < 6:
+        return f"Рекомендуемые id закупок для пользователя {user_id} следующие: {recommends}"
+
+    return f"Рекомендуемые id закупок для пользователя {user_id} следующие: {recommends[:5]}"
 
 
-@app.post("/load-evaluation-data/win_predict")
+@app.get("/load-evaluate-win-predict")
 async def load_evaluation_win_predict():
     global CONFIG_PATH
 
@@ -67,7 +73,7 @@ async def load_evaluation_win_predict():
     return f"Данные для оценки загружены. Результаты предсказаний следующие: {predicts[:5]}"
 
 
-@app.post("/load-all-data/{user_id}")
+@app.get("/load-all-data/{user_id}")
 async def load_all_data(user_id: int):
     # Загрузка модели рекомендательной системы и данных для оценки
     response_recommender = await load_recommender_model(user_id)
@@ -78,18 +84,12 @@ async def load_all_data(user_id: int):
 
 if __name__ == '__main__':
 
-    # Список пользователей базы данных
-    users = evaluation.load_users(CONFIG_PATH)
-
-    # Список пользователей с обученной моделью
-    recommender_loaded_users = []
-
     # Директория предобработанных данных
     processed_data = "../data/processed"
 
     # Проверка на отсутствие предобработанных данных
     if not os.path.isdir(processed_data):
-        nlp = spacy.load("ru_core_news_sm")
+        nlp = ru_core_news_sm.load()
 
         load_data(CONFIG_PATH)
 

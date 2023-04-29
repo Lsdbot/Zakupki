@@ -44,6 +44,7 @@ def load_model(config_path: str, supplier_id: int) -> None:
         # сохраняем новые параметры и модели в файлы
         with open(train['params'], 'w') as f:
             yaml.dump(params, f)
+
         joblib.dump(models, train['models'])
 
 

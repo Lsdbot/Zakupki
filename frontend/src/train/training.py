@@ -16,8 +16,19 @@ def training_recommender(endpoint: str):
     :param config: конфигурационный файл
     :param endpoint: endpoint
     """
+    headers = {
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'DNT': '1',
+        'Accept-Encoding': 'gzip, deflate, lzma, sdch',
+        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'
+    }
+
     with st.spinner("Модель обучается..."):
-        output = requests.post(endpoint, timeout=8000)
+        output = requests.get(endpoint, timeout=20000, headers=headers)
 
     st.success(output)
     st.write(output.text)
@@ -30,16 +41,19 @@ def training_win_predictor(config, endpoint: str):
     :param endpoint: endpoint
     """
 
+    headers = {
+        'Connection': 'keep-alive',
+        'Cache-Control': 'max-age=0',
+        'Upgrade-Insecure-Requests': '1',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.116 Safari/537.36 OPR/40.0.2308.81',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'DNT': '1',
+        'Accept-Encoding': 'gzip, deflate, lzma, sdch',
+        'Accept-Language': 'ru-RU,ru;q=0.8,en-US;q=0.6,en;q=0.4'
+    }
+
     with st.spinner("Модель обучается..."):
-        output = requests.post(endpoint, timeout=8000)
+        output = requests.get(endpoint, timeout=20000, headers=headers)
 
     st.success(output)
     st.write(output.text)
-
-    # plot study
-    # study = joblib.load(os.path.join(config["train"]["study_path"]))
-    # fig_imp = plot_param_importances(study)
-    # fig_history = plot_optimization_history(study)
-    #
-    # st.plotly_chart(fig_imp, use_container_width=True)
-    # st.plotly_chart(fig_history, use_container_width=True)

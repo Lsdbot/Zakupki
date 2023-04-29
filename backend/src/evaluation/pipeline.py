@@ -79,8 +79,6 @@ def pipeline_evaluate_predicts(config: dict) -> list:
 
     evaluate_data = evaluate_data.drop('is_winner', axis=1)
 
-    print(evaluate_data.columns)
-
     # загружаем модель и предсказываем, победит ли поставщик в закупке
     model = get_win_model(train_win_predictor['models'])
     y_pred = model.predict(evaluate_data)

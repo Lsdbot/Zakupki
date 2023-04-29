@@ -5,7 +5,6 @@
 
 
 from src import charts, evaluation, data, train
-import pandas as pd
 import streamlit as st
 import yaml
 
@@ -76,7 +75,6 @@ def eda():
     season_activity = st.sidebar.checkbox("Активность поставщиков в течение года")
     price_mean_std = st.sidebar.checkbox("Средняя цена и разброс цены закупок поставщиков")
 
-
     if uniq_okpd2:
         st.pyplot(
             charts.chart_unique_okpd2(df, 'n_unique_okpd2',
@@ -98,28 +96,6 @@ def eda():
         fig = ax.get_figure()
 
         st.pyplot(fig)
-
-
-def load_evaluate_data():
-    """
-    Функция для загрузки csv файла и преобразования его в датафрейм.
-    """
-    # заголовок страницы
-    st.title("Загрузка файла")
-
-    with open(CONFIG_PATH) as file:
-        config = yaml.load(file, Loader=yaml.FullLoader)
-
-    # форма для загрузки файла
-    uploaded_file = st.file_uploader("Выберите csv файл", type="csv")
-
-    # проверка наличия загруженного файла
-    if uploaded_file is not None:
-        # преобразование файла в датафрейм
-        df = pd.read_csv(uploaded_file)
-
-        # вывод датафрейма на страницу
-        st.write(df[:5])
 
 
 def train_recommender():
@@ -214,7 +190,6 @@ def get_metrics():
     with open(config['train']['win_predictor']['metrics']) as file:
         win_predictor_metrics = yaml.load(file, Loader=yaml.FullLoader)
 
-
     dict_metrics = {
         "Базовые метрики модели рекомендаций": recommender_metrics['basic_metrics'],
         "Лучшие метрики модели рекомендаций": recommender_metrics['best_metrics'],
@@ -223,7 +198,28 @@ def get_metrics():
     }
 
     type_metric = st.sidebar.selectbox("Метрики качества", dict_metrics.keys())
-    st.write(dict_metrics[type_metric])
+
+    roc_auc, precision, recall, f1_metric, logloss = st.columns(5)
+    roc_auc.metric(
+        "ROC-AUC",
+        dict_metrics[type_metric]["ROC_AUC"],
+    )
+    precision.metric(
+        "Precision",
+        dict_metrics[type_metric]["Precision"]
+    )
+    recall.metric(
+        "Recall",
+        dict_metrics[type_metric]["Recall"],
+    )
+    f1_metric.metric(
+        "F1 score",
+        dict_metrics[type_metric]["f1"]
+    )
+    logloss.metric(
+        "Logloss",
+        dict_metrics[type_metric]["Logloss"]
+    )
 
 
 def main():

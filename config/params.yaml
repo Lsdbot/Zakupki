@@ -72,9 +72,9 @@ train:
     n_trials: 20
     random_state: 42
     N_FOLDS: 4
-    params: /home/sergey/projects/zakupki/models/params/recommender_params.yaml
-    models: /home/sergey/projects/zakupki/models/models/recommender_models.joblib
-    metrics: /home/sergey/projects/zakupki/models/recommender_metrics.yaml
+    params: ../models/params/recommender_params.yaml
+    models: ../models/models/recommender_models.joblib
+    metrics: ../models/recommender_metrics.yaml
   win_predictor:
     test_size: 0.25
     drop_columns: ['vectorized', 'purchase', 'customer']
@@ -83,20 +83,23 @@ train:
     n_trials: 10
     random_state: 42
     N_FOLDS: 4
-    params: /home/sergey/projects/zakupki/models/params/ensemble_params.yaml
-    models: /home/sergey/projects/zakupki/models/models/ensemble_models.joblib
-    metrics: /home/sergey/projects/zakupki/models/win_metrics.yaml
+    params: ../models/params/ensemble_params.yaml
+    models: ../models/models/ensemble_models.joblib
+    metrics: ../models/win_metrics.yaml
 
 evaluate:
-  recommend_sub_path: /home/sergey/projects/zakupki/data/check/recommend_submission.csv
-  winner_sub_path: /home/sergey/projects/zakupki/data/check/winner_submission.csv
-  evaluate_data: /home/sergey/projects/zakupki/data/check/evaluate.csv
+  recommend_sub_path: ../data/check/recommend_submission.csv
+  winner_sub_path: ../data/check/winner_submission.csv
+  evaluate_data: ../data/check/evaluate.csv
 
 endpoints:
-  train_recommender: "http://localhost:8000/load-recommender-model/"
-  train_win_predictor: "http://localhost:8000/load-win-predictor-model"
-  evaluate_recommender: "http://localhost:8000/load-evaluation-data/recommends/"
-  evaluate_win_predictor: "http://localhost:8000/load-evaluation-data/win_predict"
-  train_evaluate_recommender: "http://localhost:8000/load-all-data/{user_id}"
-
-    
+  train_recommender: "http://fastapi:8000/load-recommender-model/"
+  train_win_predictor: "http://fastapi:8000/load-win-predictor-model"
+  evaluate_recommender: "http://fastapi:8000/load-evaluate-recommends/"
+  evaluate_win_predictor: "http://fastapi:8000/load-evaluate-win-predict"
+  train_evaluate_recommender: "http://fastapi:8000/load-all-data/{user_id}"
+#  train_recommender: "http://localhost:8000/load-recommender-model/"
+#  train_win_predictor: "http://localhost:8000/load-win-predictor-model"
+#  evaluate_recommender: "http://localhost:8000/load-evaluate-recommends/"
+#  evaluate_win_predictor: "http://localhost:8000/load-evaluate-win-predict"
+#  train_evaluate_recommender: "http://localhost:8000/load-all-data/{user_id}"

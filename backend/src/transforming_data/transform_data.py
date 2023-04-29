@@ -6,7 +6,7 @@
 import pandas as pd
 
 import multiprocessing as mp
-import spacy
+import ru_core_news_sm
 
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -15,7 +15,7 @@ from sklearn.decomposition import TruncatedSVD
 from .get_data import get_data
 
 
-nlp = spacy.load("ru_core_news_sm")
+nlp = ru_core_news_sm.load()
 
 def merge_dataframes(column: str, *dfs) -> pd.DataFrame:
     return pd.merge(dfs, on=column)
