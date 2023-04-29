@@ -16,6 +16,7 @@ def training_recommender(endpoint: str):
     :param config: конфигурационный файл
     :param endpoint: endpoint
     """
+    # заголовки запроса
     headers = {
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',
@@ -40,7 +41,7 @@ def training_win_predictor(config, endpoint: str):
     :param config: конфигурационный файл
     :param endpoint: endpoint
     """
-
+    # заголовки запроса
     headers = {
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',

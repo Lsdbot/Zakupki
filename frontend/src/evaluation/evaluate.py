@@ -8,7 +8,7 @@ import requests
 
 
 def evaluate_recommender(endpoint: str):
-
+    # заголовки запроса
     headers = {
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',
@@ -28,7 +28,7 @@ def evaluate_recommender(endpoint: str):
 
 
 def evaluate_win_predictor(endpoint: str):
-
+    # заголовки запроса
     headers = {
         'Connection': 'keep-alive',
         'Cache-Control': 'max-age=0',

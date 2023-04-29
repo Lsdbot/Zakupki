@@ -5,14 +5,6 @@
 
 from .pipeline import pipeline_evaluate_recommends, pipeline_evaluate_predicts
 
-from sklearn.metrics import (
-    roc_auc_score,
-    precision_score,
-    recall_score,
-    f1_score,
-    log_loss,
-)
-
 import pandas as pd
 
 import yaml
