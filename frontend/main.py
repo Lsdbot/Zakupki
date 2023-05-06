@@ -3,8 +3,8 @@
 Версия: 1.0
 """
 
-
 from src import charts, evaluation, data, train
+
 import streamlit as st
 import yaml
 
@@ -70,7 +70,6 @@ def eda():
     df = data.get_data(preproc['train_data'], 'vectorized')
     st.write(df[:5])
 
-
     uniq_okpd2 = st.sidebar.checkbox("Кол-во уникальных ОКПД2 у поставщиков")
     season_activity = st.sidebar.checkbox("Активность поставщиков в течение года")
     price_mean_std = st.sidebar.checkbox("Средняя цена и разброс цены закупок поставщиков")
@@ -135,7 +134,7 @@ def train_win_predictor():
     # кнопка для запуска тренировки модели
     if st.button("Запустить тренировку"):
         # тренировка модели
-        train.training_win_predictor(config, endpoint)
+        train.training_win_predictor(endpoint)
 
 
 def get_recommends():

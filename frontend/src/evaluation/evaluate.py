@@ -7,7 +7,16 @@ import streamlit as st
 import requests
 
 
-def evaluate_recommender(endpoint: str):
+def evaluate_recommender(endpoint: str) -> None:
+    """
+    Оценка рекомендательной системы.
+
+    Аргументы:
+    endpoint -- URL-адрес эндпоинта.
+
+    Возвращает:
+    None.
+    """
     # заголовки запроса
     headers = {
         'Connection': 'keep-alive',
@@ -28,6 +37,15 @@ def evaluate_recommender(endpoint: str):
 
 
 def evaluate_win_predictor(endpoint: str):
+    """
+    Оценка модели прогнозирования побед.
+
+    Аргументы:
+    endpoint -- URL-адрес эндпоинта.
+
+    Возвращает:
+    None.
+    """
     # заголовки запроса
     headers = {
         'Connection': 'keep-alive',

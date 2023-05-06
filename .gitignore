@@ -1,13 +1,9 @@
-#Jupyter notebook
-*.ipynb_checkpoints
-
 #Python
 .idea
 __pycache__/
 
 #csv files
 /data/
-notebooks/*.csv
 
 #catboost files
 catboost_info/

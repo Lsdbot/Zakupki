@@ -56,7 +56,7 @@ preprocessing:
   purchases_path: ../data/raw/small_purchases.csv
   train_data: ../data/processed/train_data.csv
   test_data: ../data/processed/test_data.csv
-  evaluate_data: ../data/check/evaluate.csv
+  evaluate_data: ../data/check/evaluate_data.csv
   recommend_sub_path: ../data/check/recommend_submission.csv
   winner_sub_path: ../data/check/winner_submission.csv
 
@@ -90,16 +90,16 @@ train:
 evaluate:
   recommend_sub_path: ../data/check/recommend_submission.csv
   winner_sub_path: ../data/check/winner_submission.csv
-  evaluate_data: ../data/check/evaluate.csv
+  evaluate_data: ../data/check/evaluate_data.csv
 
 endpoints:
   train_recommender: "http://fastapi:8000/load-recommender-model/"
   train_win_predictor: "http://fastapi:8000/load-win-predictor-model"
-  evaluate_recommender: "http://fastapi:8000/load-evaluate-recommends/"
-  evaluate_win_predictor: "http://fastapi:8000/load-evaluate-win-predict"
+  evaluate_recommender: "http://fastapi:8000/load-evaluate-data-recommends/"
+  evaluate_win_predictor: "http://fastapi:8000/load-evaluate-data-win-predict"
   train_evaluate_recommender: "http://fastapi:8000/load-all-data/{user_id}"
 #  train_recommender: "http://localhost:8000/load-recommender-model/"
 #  train_win_predictor: "http://localhost:8000/load-win-predictor-model"
-#  evaluate_recommender: "http://localhost:8000/load-evaluate-recommends/"
-#  evaluate_win_predictor: "http://localhost:8000/load-evaluate-win-predict"
+#  evaluate_recommender: "http://localhost:8000/load-evaluate-data-recommends/"
+#  evaluate_win_predictor: "http://localhost:8000/load-evaluate-data-win-predict"
 #  train_evaluate_recommender: "http://localhost:8000/load-all-data/{user_id}"

@@ -1,5 +1,5 @@
 """
-Программа: Тренировка данных
+Программа: Тренировка рекомендательных моделей
 Версия: 1.0
 """
 
@@ -15,7 +15,17 @@ from sklearn.metrics import roc_auc_score
 
 
 def train_model(x_train, y_train, study) -> LGBMClassifier:
+    """
+    Train a LightGBM model with optimal hyperparameters.
 
+    Args:
+        x_train (np.ndarray): Training data features.
+        y_train (np.ndarray): Training data target.
+        study (optuna.study.Study): Optuna study object with the best hyperparameters.
+
+    Returns:
+        lightgbm.sklearn.LGBMClassifier: Trained LightGBM model with the best hyperparameters.
+    """
     params = study.best_params
 
     model = LGBMClassifier(n_jobs=-1, **params)

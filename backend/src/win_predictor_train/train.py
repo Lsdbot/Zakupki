@@ -1,12 +1,10 @@
 """
-Программа: Тренировка данных
+Программа: Тренировка прогнозирующей победителя модели
 Версия: 1.0
 """
 
 import pandas as pd
 import numpy as np
-
-from typing import List
 
 from catboost import CatBoostClassifier
 
@@ -14,6 +12,33 @@ import optuna
 
 from sklearn.model_selection import StratifiedKFold
 from sklearn.metrics import roc_auc_score
+
+
+def train_model(x_train: pd.DataFrame, y_train: pd.Series, **params) -> CatBoostClassifier:
+    """
+    Обучает модель CatBoost с помощью заданных параметров.
+
+    Аргументы:
+    x_train -- обучающие данные в виде таблицы pandas DataFrame;
+    y_train -- метки классов для обучающих данных в виде pandas Series;
+    cat_features -- список индексов категориальных признаков в x_train;
+    params -- словарь параметров для модели CatBoost.
+
+    Возвращает:
+    Обученную модель CatBoostClassifier.
+    """
+
+    # Вычисляем соотношение классов
+    ratio = y_train[y_train == 0].shape[0] / y_train[y_train == 1].shape[0]
+
+    # Создаем модель CatBoostClassifier
+    model = CatBoostClassifier(**params)
+
+    # Обучаем модель на обучающих данных
+    model.fit(x_train, y_train, verbose=0)
+
+    # Возвращаем обученную модель
+    return model
 
 
 def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> np.ndarray:
@@ -77,36 +102,6 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
     return np.mean(cv_pred)
 
 
-def train_model(x_train: pd.DataFrame, y_train: pd.Series,
-                cat_features: List[int], **params) -> CatBoostClassifier:
-    """
-    Обучает модель CatBoost с помощью заданных параметров.
-
-    Аргументы:
-    x_train -- обучающие данные в виде таблицы pandas DataFrame;
-    y_train -- метки классов для обучающих данных в виде pandas Series;
-    cat_features -- список индексов категориальных признаков в x_train;
-    params -- словарь параметров для модели CatBoost.
-
-    Возвращает:
-    Обученную модель CatBoostClassifier.
-    """
-
-    # Вычисляем соотношение классов
-    ratio = y_train[y_train == 0].shape[0] / y_train[y_train == 1].shape[0]
-
-    # Создаем модель CatBoostClassifier
-    model = CatBoostClassifier(scale_pos_weight=ratio,
-                               cat_features=cat_features,
-                               **params)
-
-    # Обучаем модель на обучающих данных
-    model.fit(x_train, y_train, verbose=0)
-
-    # Возвращаем обученную модель
-    return model
-
-
 def find_optimal_params(x_train: pd.DataFrame, y_train: pd.Series,
                         **kwargs: dict) -> optuna.Study:
     """
@@ -133,4 +128,3 @@ def find_optimal_params(x_train: pd.DataFrame, y_train: pd.Series,
 
     # Возвращаем объект Study с найденными оптимальными параметрами
     return study
-
