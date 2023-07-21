@@ -128,11 +128,10 @@ def get_users(config_path: str) -> list:
     датафрейма, считываемого из файла по пути config['preprocessing']['recommend_sub_path'],
     и возвращает список всех id поставщиков.
 
-    :param config_path: путь к конфигурационному файлу
-    :return: список всех id поставщиков
-
-    Пример использования:
-    users = load_users('config.yaml')
+    Аргументы:
+        config_path: путь к конфигурационному файлу
+    Возвращает:
+        список всех id поставщиков
     """
     with open(config_path) as file:
         config = yaml.load(file, Loader=yaml.FullLoader)

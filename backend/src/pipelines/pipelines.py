@@ -73,8 +73,8 @@ def pipeline_train_win_predictor(config_path: str) -> None:
     """
     Пайплайн для обучения модели, прогнозирующую победителя
 
-    :param config_path: путь до конфигурационного файла
-    :return: None
+    Аргументы:
+        config_path (str): путь до конфигурационного файла
     """
     # загрузка конфигурации модели
     with open(config_path) as file:

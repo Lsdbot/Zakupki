@@ -12,10 +12,7 @@ def evaluate_recommender(endpoint: str) -> None:
     Оценка рекомендательной системы.
 
     Аргументы:
-    endpoint -- URL-адрес эндпоинта.
-
-    Возвращает:
-    None.
+        endpoint: URL-адрес эндпоинта.
     """
     # заголовки запроса
     headers = {
@@ -41,10 +38,7 @@ def evaluate_win_predictor(endpoint: str):
     Оценка модели прогнозирования побед.
 
     Аргументы:
-    endpoint -- URL-адрес эндпоинта.
-
-    Возвращает:
-    None.
+        endpoint: URL-адрес эндпоинта.
     """
     # заголовки запроса
     headers = {

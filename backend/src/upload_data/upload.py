@@ -15,14 +15,11 @@ def load_recommend_model(model: LGBMClassifier, supplier_id: int, **kwargs) -> N
     Cораняет обученную рекомендательную модель и ее параметры для конкретного поставщика.
 
     Аргументы:
-    - model (LGBMClassifier): обученная модель
-    - supplier_id (int): идентификатор поставщика.
-    - kwargs (dict):
-        - models (str): путь к файлу конфигурации, содержащему модели.
-        - params (str): путь к файлу конфигурации, содержащему параметы моделей.
-
-    Возвращаемое значение:
-    - None.
+        model (LGBMClassifier): обученная модель
+        supplier_id (int): идентификатор поставщика.
+        kwargs (dict):
+            models (str): путь к файлу конфигурации, содержащему модели.
+            params (str): путь к файлу конфигурации, содержащему параметы моделей.
     """
     # загрузка моделей и их параметров
     with open(kwargs['params']) as file:
@@ -44,13 +41,10 @@ def load_model(model: CatBoostClassifier, **kwargs) -> None:
     Cохраняет обученную модель, предсказывающую победителя, и ее параметры.
 
     Аргументы:
-    - model (СatBoostClassifier): обученная модель
-    - kwargs (dict):
-        - models (str): путь к файлу конфигурации, содержащему модели.
-        - params (str): путь к файлу конфигурации, содержащему параметы моделей.
-
-    Возвращаемое значение:
-    - None.
+        model (СatBoostClassifier): обученная модель
+        kwargs (dict):
+            models (str): путь к файлу конфигурации, содержащему модели.
+            params (str): путь к файлу конфигурации, содержащему параметы моделей.
     """
     # загрузка моделей и их параметров
     with open(kwargs['params']) as file:
@@ -72,19 +66,16 @@ def load_data(df_train: pd.DataFrame, df_test: pd.DataFrame, df_recommend_submis
     """
     Загрузка данных из файла конфигурации и сохранение обработанных данных в CSV-файлы.
 
-    Args:
-    - df_train: DataFrame с тренировочными данными.
-    - df_test: DataFrame с тестовыми данными.
-    - df_recommend_submission: DataFrame с данными для получения предсказаний.
-    - df_evaluate: DataFrame с данными для оценки модели.
-    - **kwargs: Аргументы для функции. Содержит:
-        - train_data (str): Путь тренировочных предобработанных данных.
-        - test_data (str): Путь тестовых предобработанных данных.
-        - recommend_sub_path (str): Путь файла, содержащего поставщиков и их закупке из тестовых данных
-        - evaluate_data (str): Путь данных для получения предсказаний
-
-    Returns:
-    None
+    Аргументы:
+        df_train: DataFrame с тренировочными данными.
+        df_test: DataFrame с тестовыми данными.
+        df_recommend_submission: DataFrame с данными для получения предсказаний.
+        df_evaluate: DataFrame с данными для оценки модели.
+        kwargs: Аргументы для функции. Содержит:
+            train_data (str): Путь тренировочных предобработанных данных.
+            test_data (str): Путь тестовых предобработанных данных.
+            recommend_sub_path (str): Путь файла, содержащего поставщиков и их закупке из тестовых данных
+            evaluate_data (str): Путь данных для получения предсказаний
     """
 
     # Сохранение данных в CSV-файлы

@@ -16,15 +16,15 @@ from sklearn.metrics import roc_auc_score
 
 def train_model(x_train, y_train, study) -> LGBMClassifier:
     """
-    Train a LightGBM model with optimal hyperparameters.
+    Обучает модель LightGBM с оптимальными гиперпараметрами.
 
-    Args:
-        x_train (np.ndarray): Training data features.
-        y_train (np.ndarray): Training data target.
-        study (optuna.study.Study): Optuna study object with the best hyperparameters.
+    Аргументы:
+        x_train (np.ndarray): Признаки обучающих данных.
+        y_train (np.ndarray): Целевая переменная обучающих данных.
+        study (optuna.study.Study): Объект исследования Optuna с лучшими гиперпараметрами.
 
-    Returns:
-        lightgbm.sklearn.LGBMClassifier: Trained LightGBM model with the best hyperparameters.
+    Возвращает:
+        lightgbm.sklearn.LGBMClassifier: Обученная модель LightGBM с лучшими гиперпараметрами.
     """
     params = study.best_params
 
@@ -36,17 +36,18 @@ def train_model(x_train, y_train, study) -> LGBMClassifier:
 
 def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> np.ndarray:
     """
-    This function defines the objective function for an Optuna study to tune hyperparameters
-    for a LightGBM binary classification model.
+    Эта функция определяет целевую функцию для исследования Optuna с настройкой гиперпараметров
+    для модели бинарной классификации LightGBM.
 
-    Args:
-        trial (optuna.Trial): A trial corresponding to a set of hyperparameters.
-        x (pd.DataFrame): The features to be used for training and validation.
-        y (pd.Series): The target variable for training and validation.
+    Аргументы:
+        trial (optuna.Trial): Проба, соответствующая набору гиперпараметров.
+        x (pd.DataFrame): Признаки, используемые для обучения и валидации.
+        y (pd.Series): Целевая переменная для обучения и валидации.
 
-    Returns:
-        float: The mean of the cross-validation AUC-ROC scores for the given set of hyperparameters.
+    Возвращает:
+        float: Среднее значение метрики AUC-ROC кросс-валидации для заданного набора гиперпараметров.
     """
+
     params = {
         'n_estimators': trial.suggest_int('n_estimators', 40, 400, step=20),
         'learning_rate': trial.suggest_float('learning_rate', 0.001, 10),
@@ -95,18 +96,19 @@ def objective(trial: optuna.Trial, x: pd.DataFrame, y: pd.Series, **kwargs) -> n
 
 
 def find_optimal_params(x_train: pd.DataFrame, y_train: pd.Series, **kwargs: dict) -> optuna.Study:
-    """Find optimal hyperparameters using Optuna.
+    """
+    Находит оптимальные гиперпараметры с помощью Optuna.
 
-    Args:
-    x_train: Pandas dataframe, training feature matrix.
-    y_train: Pandas series, training target vector.
-    **kwargs: Dictionary with additional arguments:
-        - N_FOLDS: int, number of cross-validation folds.
-        - random_state: int, random state for reproducibility.
-        - n_trials: int, number of trials in the optimization.
+    Аргументы:
+        x_train: Pandas DataFrame, матрица признаков обучающих данных.
+        y_train: Pandas Series, вектор целевой переменной обучающих данных.
+        **kwargs: Словарь с дополнительными аргументами:
+            - N_FOLDS: int, количество складок для кросс-валидации.
+            - random_state: int, случайное значение для воспроизводимости.
+            - n_trials: int, количество итераций оптимизации.
 
-    Returns:
-    optuna.Study: Object containing the results of the hyperparameter optimization.
+    Возвращает:
+        optuna.Study: Объект, содержащий результаты оптимизации гиперпараметров.
     """
 
     def func(trial):

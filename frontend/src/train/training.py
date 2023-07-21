@@ -12,7 +12,9 @@ import streamlit as st
 def training_recommender(endpoint: str):
     """
     Тренировка рекомендательной модели
-    :param endpoint: endpoint
+
+    Аргументы:
+        endpoint: endpoint
     """
     # заголовки запроса
     headers = {
@@ -36,7 +38,9 @@ def training_recommender(endpoint: str):
 def training_win_predictor(endpoint: str):
     """
     Тренировка модели предсказания
-    :param endpoint: endpoint
+
+    Аргументы:
+        endpoint: endpoint
     """
     # заголовки запроса
     headers = {

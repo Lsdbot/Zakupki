@@ -24,11 +24,11 @@ def transform_ids(df: pd.DataFrame, column: str) -> pd.Series:
     """
     Извлекает числовые идентификаторы из колонки `column` в датафрейме `df` и возвращает их в виде pandas.Series.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): Исходный датафрейм.
         column (str): Название колонки, из которой нужно извлечь числовые идентификаторы.
 
-    Returns:
+    Возвращает:
         pd.Series: Pandas.Series, содержащий числовые идентификаторы, извлеченные из указанной колонки датафрейма.
 
     """
@@ -39,12 +39,12 @@ def transform_vector(df: pd.DataFrame, n_components: int, vector_column: str):
     """
     Добавляет столбцы с разложением вектора на n_components компонент.
 
-    Parameters:
-        - df (pd.DataFrame): Исходный DataFrame.
-        - n_components (int): Количество компонент разложения.
-        - vector (str): Название столбца с вектором.
+    Аргументы:
+        df (pd.DataFrame): Исходный DataFrame.
+        n_components (int): Количество компонент разложения.
+        vector (str): Название столбца с вектором.
 
-    Returns:
+    Возвращает:
         pd.DataFrame: DataFrame с добавленными столбцами.
     """
     for i in range(n_components):
@@ -57,10 +57,10 @@ def lemmatize_text(row: dict) -> list:
     """
     Производит лемматизацию текста в колонках датафрейма `row` с помощью библиотеки spaCy.
 
-    Args:
+    Аргументы:
         row (dict): Словарь, содержащий колонки датафрейма с текстовыми данными.
 
-    Returns:
+    Возвращает:
         list: Список лемм слов в колонках датафрейма.
 
     """
@@ -72,10 +72,10 @@ def get_tokens(df: pd.DataFrame) -> pd.Series:
     """
     Производит лемматизацию текста в колонках датафрейма `df` и возвращает леммы в виде pandas.Series.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): Исходный датафрейм.
 
-    Returns:
+    Возвращает:
         pd.Series: Pandas.Series, содержащий леммы текста в колонках датафрейма.
 
     """
@@ -86,18 +86,19 @@ def get_tokens(df: pd.DataFrame) -> pd.Series:
 
 def vectorize_tfidf_matrix(df_column: pd.Series, n_components: int):
     """
-    This function takes a pandas DataFrame column, flattens the data and applies
-    a TF-IDF vectorizer to convert the text data into a sparse matrix. It then
-    applies TruncatedSVD to reduce the dimensionality of the matrix to 100 components.
-    The resulting matrix is then yielded row by row.
+    Принимает столбец pandas DataFrame, выравнивает данные и применяет
+    векторизатор TF-IDF для преобразования текстовых данных в разреженную матрицу.
+    Затем она применяет метод TruncatedSVD для уменьшения размерности матрицы.
+    Результатирующая матрица затем возвращается строка за строкой.
 
-    Args:
-        df_column (Iterable): A column of text data.
-        n_components (int): Number of componets vectorized text
+    Аргументы:
+        df_column (Iterable): Столбец текстовых данных.
+        n_components (int): Количество компонентов векторизованных текстов.
 
-    Yields:
-        Iterable: A row of the transformed matrix.
+    Возвращает:
+        Iterable: Строка преобразованной матрицы.
     """
+
     flattened_list = [' '.join(words) for words in df_column]
 
     # создаем объект TfidfVectorizer
@@ -119,11 +120,11 @@ def transform_data(df_sup: pd.DataFrame, df_pur: pd.DataFrame, **kwargs) -> pd.D
     Обрабатывает данные, объединяет таблицы, преобразует и заполняет значения, векторизует текст и
     возвращает новый DataFrame.
 
-    Args:
+    Аргументы:
         df_sup (pd.DataFrame): DataFrame, содержащий сырые данные о поставках.
         df_pur (pd.DataFrame): DataFrame, содержащий сырые данные о закупках.
 
-    Returns:
+    Возвращает:
         pd.DataFrame: DataFrame с обработанными данными.
 
     """
@@ -163,12 +164,12 @@ def filter_data(df: pd.DataFrame, column: str, size: int) -> pd.DataFrame:
     """
     Отбирает данные DataFrame по значению в столбце, которое встречается чаще заданного количества раз.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): DataFrame для фильтрации.
         column (str): Название столбца для фильтрации.
         size (int): Минимальное количество вхождений значения в столбце для сохранения в результирующем DataFrame.
 
-    Returns:
+    Возвращает:
         pd.DataFrame: DataFrame с отфильтрованными данными.
 
     """
@@ -185,7 +186,7 @@ def split_data(df: pd.DataFrame, **kwargs) -> tuple:
     Разбивает DataFrame на обучающую и тестовую выборки и отбирает данные по значению в столбце, которое встречается
     чаще заданного количества раз.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): DataFrame для разбиения.
         kwargs:
             filter_column (str): Имя столбца для фильтрации по частоте вхождения значений.
@@ -194,7 +195,7 @@ def split_data(df: pd.DataFrame, **kwargs) -> tuple:
                 test_size (float): Доля тестовой выборки.
                 random_state (int): Случайное состояние генератора псевдослучайных чисел для разбиения.
                 stratify (str or array-like): Столбец или массив для стратификации выборки.
-    Returns:
+    Возвращает:
         tuple: Кортеж, содержащий два DataFrame - обучающую и тестовую выборки.
 
     """
@@ -215,11 +216,11 @@ def extract_month(df, column) -> pd.Series:
     """
     Извлекает месяц из столбца даты в данном DataFrame.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): DataFrame, содержащий столбец даты для извлечения.
         column (str): Название столбца даты для извлечения.
 
-    Returns:
+    Возвращает:
         pd.Series: Серия, содержащая извлеченные значения месяца из столбца даты.
     """
     return df[column].apply(lambda x: int(x.split('-')[1]))
@@ -229,12 +230,12 @@ def extract_reg_code(df, column_region, column_okpd2) -> pd.Series:
     """
     Извлекает код региона из двух столбцов данного DataFrame.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): DataFrame, содержащий столбцы для извлечения.
         column_region (str): Название столбца с регионами для извлечения.
         column_okpd2 (str): Название столбца с кодами товарной номенклатуры для извлечения.
 
-    Returns:
+    Возвращает:
         pd.Series: Серия, содержащая коды региона, извлеченные из двух столбцов.
     """
     return df[column_region].astype('str') + '_' + df[column_okpd2].astype('str')
@@ -245,14 +246,14 @@ def extract_purchase_size(df, group, values, name, on_col) -> pd.DataFrame:
     Извлекает размер покупок для каждой группы, заданной по определенному столбцу,
     и объединяет результаты с данным DataFrame.
 
-    Args:
+    Аргументы:
         df (pd.DataFrame): DataFrame, содержащий столбец для группировки.
         group (str): Название столбца для группировки.
         values (str): Название столбца для подсчета размера покупок.
         name (str): Название столбца для объединения результатов.
         on_col (str): Название столбца для объединения.
 
-    Returns:
+    Возвращает:
         pd.DataFrame: DataFrame с размерами покупок для каждой группы, объединенный с данным DataFrame.
     """
     return df.merge(df.groupby(group)[values].size().to_frame(name),
@@ -265,14 +266,14 @@ def extract_flag(df_train: pd.DataFrame, df_test: pd.DataFrame, train_columns: l
     Извлекает флаги для каждой покупки, показывающие, была ли эта покупка выигрышной для соответствующей группы.
     Объединяет результаты с данным DataFrame.
 
-    Args:
+    Аргументы:
         df_train (pd.DataFrame): Обучающий DataFrame.
         df_test (pd.DataFrame): Тестовый DataFrame.
         train_columns (list): Список столбцов для извлечения.
         group (list): Список столбцов для группировки.
         on_col (list): Список столбцов для объединения.
 
-    Returns:
+    Возвращает:
         tuple: Кортеж из двух DataFrame, содержащий извлеченные флаги
     """
     df_train['flag_won'] = df_train[df_train.is_winner == 1].groupby(
@@ -290,15 +291,16 @@ def extract_unique_okpd2(df_train: pd.DataFrame, df_test: pd.DataFrame, group: s
     Извлекает количество уникальных значений в столбце values для каждой группы из столбца group
     и добавляет столбец с результатом под именем name в обеих таблицах.
 
-    Параметры:
-    - df_train (pd.DataFrame): исходная таблица с данными для обучения модели.
-    - df_test (pd.DataFrame): таблица с данными для тестирования модели.
-    - group (str): название столбца, содержащего группы для агрегации.
-    - values (str): название столбца, содержащего значения, для которых необходимо определить уникальные значения.
-    - on_col (str): название столбца, используемого для объединения таблиц.
-    - name (str): название нового столбца, содержащего количество уникальных значений для каждой группы.
+    Аргументы:
+        df_train (pd.DataFrame): исходная таблица с данными для обучения модели.
+        df_test (pd.DataFrame): таблица с данными для тестирования модели.
+        group (str): название столбца, содержащего группы для агрегации.
+        values (str): название столбца, содержащего значения, для которых необходимо определить уникальные значения.
+        on_col (str): название столбца, используемого для объединения таблиц.
+        name (str): название нового столбца, содержащего количество уникальных значений для каждой группы.
 
-    Возвращает кортеж из двух pd.DataFrame: обновленную таблицу df_train и обновленную таблицу df_test.
+    Возвращает:
+        tuple: Обновленную таблицу df_train и обновленную таблицу df_test.
     """
     df_train = df_train.merge(df_train.groupby(group)[values].nunique().to_frame(name),
                               how='outer', on=on_col)
@@ -314,11 +316,11 @@ def generate_features(df_train: pd.DataFrame, df_test: pd.DataFrame, **kwargs) -
     Функция для преобразования данных тренировочного и тестового наборов с помощью инженерии признаков.
 
     Аргументы:
-    - df_train (pd.DataFrame): Данные для тренировки.
-    - df_test (pd.DataFrame): Данные для тестирования.
+        df_train (pd.DataFrame): Данные для тренировки.
+        df_test (pd.DataFrame): Данные для тестирования.
 
-    Возвращаемое значение:
-    - tuple: Кортеж, содержащий обработанные данные для тренировки и тестирования.
+    Возвращает:
+        tuple: Кортеж, содержащий обработанные данные для тренировки и тестирования.
     """
 
     # Извлечение месяца из даты
@@ -360,13 +362,15 @@ def get_supplier_data(df_train: pd.DataFrame, df_test: pd.DataFrame, sup: int, s
     Удаляет ненужные для системы рекомендаций столбцы и дубликаты.
     Удаляет закупки, которые есть и test, и в train.
 
-    :param df_train: обучающая выборка
-    :param df_test: тестовая выборка
-    :param sup: код поставщика
-    :param supplier_purchases: закупки поставщика
-    :param kwargs: дополнительные аргументы - filter_column, drop_columns, index_column
+    Аргументы:
+        df_train: обучающая выборка
+        df_test: тестовая выборка
+        sup: код поставщика
+        supplier_purchases: закупки поставщика
+        kwargs: дополнительные аргументы - filter_column, drop_columns, index_column
 
-    :return: кортеж из фильтрованных train и test данных поставщика
+    Возвращет:
+        tuple: Кортеж из фильтрованных train и test данных поставщика
     """
     unique_reg_okpd = df_train[df_train[kwargs['sup_column']] == sup][kwargs['filter_column']].unique()
 
@@ -395,11 +399,8 @@ def pipeline_preprocessing(config_path: str) -> None:
     """
     Обработка данных для последующей моделирования.
 
-    Args:
-    config_path (str): Путь до конфигурационного файла.
-
-    Returns:
-    None
+    Аргументы:
+        config_path (str): Путь до конфигурационного файла.
     """
     # загрузка конфигурации модели
     with open(config_path) as file:

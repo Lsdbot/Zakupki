@@ -14,11 +14,11 @@ def remove_outliers(df: pd.DataFrame, col: str) -> pd.DataFrame:
     Функция удаляет выбросы из DataFrame по заданному столбцу.
 
     Аргументы:
-    df (pd.DataFrame): Исходный DataFrame
-    col (str): Название столбца, по которому будут удалены выбросы
+        df (pd.DataFrame): Исходный DataFrame
+        col (str): Название столбца, по которому будут удалены выбросы
 
     Возвращает:
-    pd.DataFrame: DataFrame без выбросов
+        pd.DataFrame: DataFrame без выбросов
     """
     mean = df[col].mean()
     std = df[col].std()
@@ -34,12 +34,12 @@ def chart_unique_okpd2(df: pd.DataFrame, column: str, title: str) -> matplotlib.
     Функция строит KDE-график распределения уникальных значений столбца column из DataFrame df.
 
     Аргументы:
-    df (pd.DataFrame): Исходный DataFrame
-    column (str): Название столбца, для которого будет построен график
-    title (str): Заголовок графика
+        df (pd.DataFrame): Исходный DataFrame
+        column (str): Название столбца, для которого будет построен график
+        title (str): Заголовок графика
 
     Возвращает:
-    matplotlib.figure.Figure: Объект графика
+        matplotlib.figure.Figure: Объект графика
     """
     fig = sns.displot(x=df[column], kind='kde')
 
@@ -54,13 +54,13 @@ def chart_season_activity(df: pd.DataFrame, x_column: str, y_column: str, title:
     сгруппированных по значениям x_column в DataFrame df.
 
     Аргументы:
-    df (pd.DataFrame): Исходный DataFrame
-    x_column (str): Название столбца, по которому будут сгруппированы значения
-    y_column (str): Название столбца, для которого будут построены столбцы диаграммы
-    title (str): Заголовок диаграммы
+        df (pd.DataFrame): Исходный DataFrame
+        x_column (str): Название столбца, по которому будут сгруппированы значения
+        y_column (str): Название столбца, для которого будут построены столбцы диаграммы
+        title (str): Заголовок диаграммы
 
     Возвращает:
-    matplotlib.figure.Figure: Объект диаграммы
+        matplotlib.figure.Figure: Объект диаграммы
     """
     plt.figure(figsize=(12, 7))
 
@@ -80,13 +80,13 @@ def chart_price(df: pd.DataFrame, x_column: str, y_column: str, title: str) -> m
     значения x_column. Затем значения, выходящие за пределы 3-х стандартных отклонений, удаляются.
 
     Аргументы:
-    df (pd.DataFrame): Исходный DataFrame
-    x_column (str): Название столбца, отображаемого на оси x
-    y_column (str): Название столбца, отображаемого на оси y
-    title (str): Заголовок диаграммы
+        df (pd.DataFrame): Исходный DataFrame
+        x_column (str): Название столбца, отображаемого на оси x
+        y_column (str): Название столбца, отображаемого на оси y
+        title (str): Заголовок диаграммы
 
     Возвращает:
-    matplotlib.figure.Figure: Объект диаграммы
+        matplotlib.figure.Figure: Объект диаграммы
     """
     # датафрейм со средней ценой и разбросом цены закупок у поставщика
     df_temp = df.groupby(x_column)[y_column].mean().to_frame(name='mean')
